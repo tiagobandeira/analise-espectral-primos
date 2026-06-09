@@ -2,6 +2,8 @@
 
 **T. Bandeira · 2026**
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602446.svg)](https://doi.org/10.5281/zenodo.20602446)
+
 ---
 
 ## Origem
@@ -157,7 +159,7 @@ pip install numpy scipy mpmath
   (caracterização por MDC) e a Proposição 2 (divisibilidade por $P(N)$), cujos
   resultados sobre $A_{n-1}$ fundamentam a Proposição da Nota 16.
 
-<!--
+
 
 ---
 
@@ -166,9 +168,11 @@ pip install numpy scipy mpmath
 ```
 T. Bandeira, "Análise Espectral de Primos via Produtos de Intervalos Binários",
 notas de pesquisa independente, 2026.
-DOI: [a ser atribuído via Zenodo]
+DOI: 10.5281/zenodo.20602446
 ```
--->
+
+
+
 ---
 
 ## Licença
