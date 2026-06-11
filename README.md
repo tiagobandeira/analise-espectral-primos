@@ -2,7 +2,7 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20636392.svg)](https://doi.org/10.5281/zenodo.20636392)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20648983.svg)](https://doi.org/10.5281/zenodo.20648983)
 
 ---
 
@@ -170,7 +170,7 @@ O cálculo de $\zeta(1/2 + it)$ via mpmath **não é mais necessário** na vers�
 ```
 T. Bandeira, "Análise Espectral de Primos via Produtos de Intervalos Binários",
 notas de pesquisa independente, 2026.
-DOI: 10.5281/zenodo.20636392
+DOI: 10.5281/zenodo.20648983
 ```
 
 ---
