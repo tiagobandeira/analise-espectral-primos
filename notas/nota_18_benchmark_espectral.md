@@ -7,7 +7,7 @@
 
 ## Resumo
 
-Comparamos sistematicamente três funções como base para extração espectral de primos via FFT de $\log|Z(\frac{1}{2}+it)|$: o primorial $P\#(p)$, o fatorial $(p-1)!$ e o produto $Q(p)$ sobre o bloco binário $[2^{n-1}, p-1]$ (Nota 17). O primorial serve como referência natural — contém exatamente os primos sem compostos — e os experimentos mostram que $Q(p)$ atinge taxa de acertos de 97,8% em média, superior ao primorial (92,0%) e ao fatorial (31,3%), com o menor tempo de cálculo médio de sinal (0,08 s) e overhead de apenas 2,2× sobre o primorial em tamanho de intervalo. O fatorial revelou-se o extrator mais fraco: perde em média 8,7 primos por caso e exige 3,3× mais elementos que o primorial. Além dos dados quantitativos, a análise visual dos espectros revela que na faixa $f \in [0.4, 0.6]$, correspondente aos primos do bloco binário de $Q(p)$, o sinal exibe picos quase periódicos de alta nitidez — estrutura ausente no primorial e fatorial. Interpretamos esse fenômeno como consequência do recorte binário, que atua como filtro natural de banda passante. A nota encerra com três questões abertas sobre comportamento assintótico do método.
+Comparamos sistematicamente três funções como base para extração espectral de primos via FFT de $\log|Z(\frac{1}{2}+it)|$: o primorial $P\#(p)$, o fatorial $(p-1)!$ e o produto $Q(p)$ sobre o bloco binário $[2^{n-1}, p-1]$ (Nota 17). O primorial serve como referência natural — contém exatamente os primos sem compostos — e os experimentos mostram que $Q(p)$ atinge taxa de acertos de 97,8% em média, superior ao primorial (92,0%) e ao fatorial (31,3%), com o menor tempo de cálculo médio de sinal (0,08 s) e overhead de apenas 2,2× sobre o primorial em tamanho de intervalo. O fatorial revelou-se o extrator mais fraco: perde em média 8,7 primos por caso e exige 3,3× mais elementos que o primorial. Além dos dados quantitativos, a análise visual dos espectros revela que na faixa $f \in [0.4, 0.6]$, correspondente aos primos do bloco binário de $Q(p)$, o sinal exibe picos quase periódicos de alta nitidez — estrutura ausente no primorial e fatorial. Interpretamos esse fenômeno como consequência do recorte binário, que atua como filtro natural de banda passante. A nota encerra com quatro questões sobre comportamento assintótico do método: a Questão 1 (escala de $t_{\max}$ para gaps pequenos) e a Questão 2 (colapso estrutural) permanecem em aberto; a Questão 3 (SNR assintótico) foi parcialmente respondida — Etapa 1 estável, Etapa 2 é o gargalo —; a Questão 4 ($\rho_{\min}$ e separabilidade logarítmica) foi respondida experimentalmente para $p \leq 499$.
 
 ---
 
@@ -158,12 +158,33 @@ A separabilidade espectral de dois primos consecutivos $q_1 < q_2$ requer $t_{\m
 **Questão 2 — Colapso estrutural.**
 Separado do problema de resolução numérica, existe uma obstrução combinatória? Ou seja, existe $p$ para o qual dois primos $q_1, q_2 < p$ produzem assinaturas espectrais idênticas em $Z_Q$ independentemente de $t_{\max}$? Isso requereria que os dois primos contribuíssem com padrões de interferência idênticos em todos os compostos do bloco — condição extremamente restritiva cuja impossibilidade não está demonstrada.
 
-**Questão 3 — SNR assintótico e ruído proporcional.**
-Os dados mostram amplitudes de $Q(p)$ nos primos do bloco consistentemente altas ($> 0.7$) e estáveis entre $p \in \{37, 41, 53\}$. A hipótese é que, conforme $p$ cresce, o SNR da Etapa 1 não degrada porque a amplitude de cada componente decai como $x^{-1/2}$ e os compostos do bloco têm $x \geq 2^{n-1}$ — os elementos mais ruidosos (inteiros pequenos) são estruturalmente excluídos. Formalmente: o SNR de um primo $q$ no bloco de $Q(p)$ é monótono crescente em $p$? E para a Etapa 2, a amplitude indireta dos primos pequenos via compostos mantém razão constante com o ruído de fundo, ou decai? Essa questão é testável computacionalmente estendendo o benchmark a $p$ maiores e traçando a curva de SNR como função de $n$.
+**Questão 3 — SNR assintótico e ruído proporcional** *(parcialmente respondida).*
+Os experimentos do Exp 3 (`fundamentos_teoricos_v2`, $p \in [37, 499]$) forneceram resposta para as duas sub-perguntas:
+
+- **Etapa 1 (primos do bloco):** o SNR mínimo permanece estável no intervalo $[0{,}72,\, 0{,}98]$ para $n \in \{5, 6, 7, 8\}$, sem degradação sistemática. A conjectura está confirmada: os compostos do bloco têm $x \geq 2^{n-1}$, excluindo estruturalmente os inteiros pequenos de alta amplitude que degradariam o sinal. O SNR da Etapa 1 não é um gargalo assintótico.
+
+- **Etapa 2 (primos de $\mathcal{P}_<$ via múltiplos compostos):** o SNR mínimo cai de $\approx 3{,}8$ para $n=5$ até $\approx 0{,}22$ para $n=7$, com recuperação parcial para $n=8$. A Etapa 2 é o **gargalo identificado**: a detectabilidade dos primos pequenos via seus múltiplos compostos degrada com $p$ crescente. A solução prática é aumentar $t_{\max}$; a regra empírica $t_{\max} > 2\pi/(\log q_2 - \log q_1)$ para o par mais próximo em $\mathcal{P}_<$ é necessária e suficiente para os casos testados.
+
+A questão em aberto passa a ser a escala exata de $t_{\max}$ necessária para manter SNR $> 1$ na Etapa 2 como função de $n$ — conectando diretamente à Questão 1 sobre gaps de primos gêmeos.
+
+**Questão 4 — Separabilidade logarítmica e decaimento de $\rho_{\min}$** *(respondida experimentalmente).*
+Experimentos sobre o classificador $\rho(m \mid \mathcal{P}_<)$ (Nota 20, Exp 4b, `fundamentos_teoricos_v2`) mediram o valor mínimo de $\rho$ entre os primos do bloco para $p \in [37, 499]$:
+
+| $p$ | $n$ | $\rho_{\min}$ | $q$ (ρ mín) |
+|-----|-----|--------------|-------------|
+| 37  | 5   | 0,00925      | 31          |
+| 53  | 5   | 0,00611      | 43          |
+| 59  | 5   | 0,00471      | 53          |
+| 97  | 6   | 0,00252      | 89          |
+| 131 | 7   | 0,00162      | 127         |
+| 251 | 7   | 0,00075      | 241         |
+| 499 | 8   | 0,00033      | 487         |
+
+$\rho_{\min}$ decai com $p$, mas permanece no intervalo $[3{,}3 \times 10^{-4},\, 9{,}3 \times 10^{-3}]$ — muitas ordens de grandeza acima de qualquer erro de ponto flutuante em precisão dupla ($\sim 10^{-15}$). A separação logarítmica entre primos e compostos do bloco **não colapsa** na faixa testada: compostos têm $\rho = 0$ exato (pelo Corolário do Teorema 1 da Nota MDC), e o gap mínimo observado é $\approx 3{,}3 \times 10^{-4}$. O limiar de classificação deve satisfazer $\rho^* < \rho_{\min}$; o valor $\rho^* = 10^{-6}$ é robusto para toda a faixa testada. A questão de se $\rho_{\min}$ tende a zero ou estabiliza para $p \to \infty$ permanece em aberto, mas a evidência empírica não indica colapso iminente.
 
 ---
 
-## 7. Conclusão
+
 
 O experimento estabelece três resultados concretos. Primeiro, $Q(p)$ é o melhor extrator entre os três: taxa média de 97,8%, zero falsos positivos, tempo médio de 0,08 s, superando inclusive o primorial em precisão nos casos $p \in \{37, 41\}$. Segundo, o fatorial é o pior extrator por larga margem — 31,3% de taxa média e perda sistemática dos primos pequenos $\{2, 5, 7, 11, 13, 17, 19\}$ — indicando que a Etapa 2 adaptada para o fatorial é menos eficaz que a original de $Q$. Terceiro, a estrutura espectral de $Q(p)$ na faixa do bloco binário é qualitativamente distinta: picos quase periódicos de alta nitidez que não aparecem no primorial nem no fatorial, resultado direto do recorte binário como filtro de banda.
 
@@ -177,4 +198,7 @@ Esses resultados validam que o bloco $[2^{n-1}, p-1]$ não é apenas uma escolha
 [Nota 14] T. Bandeira, *Sequência de Sequências de Primos via Operador $W_i$ e Estrutura Primorial*, nota adicional (2026).  
 [Nota 15] T. Bandeira, *Estrutura Primorial, Classes Residuais e Conexões com a Função Zeta*, nota adicional (2026).  
 [Nota 16] T. Bandeira, *Conexão Espectral entre Blocos Binários e a Hierarquia Primorial*, nota adicional (2026).  
-[Nota 17] T. Bandeira, *Ferramenta Espectral via $Q(p)$: Fundamentação e Validação Computacional*, nota adicional (2026).
+[Nota 17] T. Bandeira, *Ferramenta Espectral via $Q(p)$: Fundamentação e Validação Computacional*, nota adicional (2026).  
+[Nota 19] T. Bandeira, *Detector Espectral de Primalidade: da Razão $R(k)$ à Irredutibilidade Logarítmica*, nota adicional (2026).  
+[Nota 20] T. Bandeira, *Crivo Espectral sem Oráculo de Primalidade*, nota adicional (2026).  
+[Exp 3/4b] T. Bandeira, `fundamentos_teoricos_v2.ipynb` — SNR como função de $p$ e estabilidade de $\rho_{\min}$, Junho de 2026.

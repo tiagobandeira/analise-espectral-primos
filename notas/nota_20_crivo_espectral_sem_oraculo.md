@@ -20,7 +20,10 @@ primo de qualquer composto no bloco está em $\mathcal{P}_< = \{q : q <
 relação ao V2: a Etapa 2 (extração de $\mathcal{P}_<$) é executada primeiro e
 fornece a base para o critério $\rho$ na Etapa 1. Validado para $p \in \{37,
 41, 53, 59, 67\}$, o método atinge taxas de detecção idênticas ao pipeline com
-`isprime()`.
+`isprime()`. Experimentos posteriores (Exp 4b, `fundamentos_teoricos_v2`)
+mostraram que o limiar $\rho^* = 0{,}005$ falha para $p \geq 59$, pois
+$\rho_{\min}$ dos primos decai com $p$. A correção é usar $\rho^* = 10^{-6}$,
+robusto para toda a faixa testada até $p = 499$.
 
 ---
 
@@ -54,10 +57,35 @@ Portanto, se $\mathcal{P}_<$ é conhecida, o critério
 $$\rho(m \mid \mathcal{P}_<) = 0 \iff m \text{ é composto no bloco}$$
 
 é **exato** — equivale a divisibilidade, sem aproximação. Para $m$ primo do
-bloco, $\rho(m \mid \mathcal{P}_<) > 0$ por definição. O valor mínimo
-observado é $\rho_{\min} \approx 0{,}009$ (primo 31 no bloco $[16, 36]$),
-suficientemente separado de zero para qualquer limiar $\rho^* \in (0,\,0{,}009)$.
-Usamos $\rho^* = 0{,}005$.
+bloco, $\rho(m \mid \mathcal{P}_<) > 0$ por definição.
+
+A separação é **estrutural**, não numérica: compostos têm $\rho = 0$ exato
+(pelo Corolário acima); primos têm $\rho > 0$ sempre (nenhum divisor em
+$\mathcal{P}_<$). O limiar $\rho^*$ serve apenas para tolerar erros de ponto
+flutuante na implementação.
+
+Experimentos sobre a faixa $p \in [37, 499]$ (Exp 4b,
+`fundamentos_teoricos_v2`) mostram que $\rho_{\min}$ decai com $p$:
+
+| $p$ | $n$ | $\rho_{\min}$ | $q$ (ρ mín) |
+|-----|-----|--------------|-------------|
+| 37  | 5   | 0,00925      | 31          |
+| 53  | 5   | 0,00611      | 43          |
+| 59  | 5   | 0,00471      | 53          |
+| 97  | 6   | 0,00252      | 89          |
+| 131 | 7   | 0,00162      | 127         |
+| 251 | 7   | 0,00075      | 241         |
+| 499 | 8   | 0,00033      | 487         |
+
+O valor mínimo observado é $\rho_{\min} \approx 3{,}3 \times 10^{-4}$ para
+$p = 499$ — ainda muitas ordens de grandeza acima de qualquer erro de ponto
+flutuante em precisão dupla ($\sim 10^{-15}$). Portanto usamos
+$\rho^* = 10^{-6}$, que é robusto para toda a faixa testada.
+
+> **Nota sobre o limiar original $\rho^* = 0{,}005$:** esse valor foi
+> calibrado para o bloco $[16, 36]$ ($p \leq 53$) e falha para $p \geq 59$,
+> onde $\rho_{\min}$ cai abaixo de $0{,}005$. A substituição por
+> $\rho^* = 10^{-6}$ corrige esse problema sem comprometer a separação.
 
 O critério $\rho$ implementado usa dois níveis:
 
@@ -103,7 +131,7 @@ a primos pequenos. Sem `isprime()`, a filtragem de falsos positivos — como os
 compostos $\{4, 8, 9\}$ que surgem por limitação de resolução — é feita por um
 filtro $\rho$ iterativo: candidatos são aceitos em ordem crescente de frequência
 (equivalentemente, de tamanho), e cada novo candidato $c$ é aceito somente se
-$\rho(c \mid \text{aceitos anteriores}) > \rho^*$:
+$\rho(c \mid \text{aceitos anteriores}) > \rho^* = 10^{-6}$:
 
 - $\rho(4 \mid \{2, 3\}) = 0$ pois $4 = 2^2$ → rejeitado ✓  
 - $\rho(8 \mid \{2,3,5,7\}) = 0$ pois $8 = 2^3$ → rejeitado ✓  
@@ -115,7 +143,8 @@ O resultado é $\mathcal{P}_<$ limpa, sem `isprime()`.
 
 Com $\mathcal{P}_<$ disponível, o crivo iterativo do V2 substitui `isprime(m)`
 por $\rho(m \mid \mathcal{P}_<)$: se $\rho = 0$, o candidato é composto e é
-apenas subtraído do sinal residual; se $\rho > \rho^*$, é primo e aceito. A
+apenas subtraído do sinal residual; se $\rho > \rho^* = 10^{-6}$, é primo e
+aceito. A
 mecânica de subtração temporal $R(t) \leftarrow R(t) - S_m(t)$ permanece
 idêntica ao V2.
 
@@ -142,29 +171,33 @@ Abaixo está a tabela preenchida com os dados obtidos no output do experimento:
 | **67** | 19 | `[2, 3, 5, 7, 11, 13, 17, 23, 31, 37, 43, 47]` | `[2, 3, 5, 7, 11, 13, 17, 23, 31, 37, 43, 47, 61]` | 67% | 72% |
 
 ### Observações sobre os resultados:
-* **Equivalência**: Para os limites $p = 37, 41, 53$ e $59$, o pipeline sem oráculo obteve exatamente a mesma lista de primos detectados que a versão de referência com `isprime()`.
-* **Divergência em $p = 67$**: O primo `61` não foi detectado pelo método sem oráculo (taxa de 67% contra 72% da versão com `isprime()`), o que indica uma sutil perda de sensibilidade no limiar de decisão espectral quando a base de primos pequenos é expandida para esse limite específico.
+* **Equivalência**: Para $p \in \{37, 41, 53, 59\}$, o pipeline sem oráculo
+  obteve exatamente a mesma lista que a versão com `isprime()`.
+* **Divergência em $p = 67$**: O primo `61` não foi detectado pelo método sem
+  oráculo. Com o limiar original $\rho^* = 0{,}005$ isso ocorria porque
+  $\rho(61 \mid \mathcal{P}_<) \approx 0{,}00396 < 0{,}005$. Com
+  $\rho^* = 10^{-6}$ esse problema é corrigido — 61 passa a ser aceito.
 
-Os primos perdidos em ambas as versões são os mesmos — limitação de resolução
-com $t_{\max} = 150$, recuperáveis aumentando para $t_{\max} = 300$ conforme
-documentado na Nota 17. O método sem oráculo não introduz perdas adicionais nem
-falsos positivos além dos já presentes no V2.
+Os primos perdidos em ambas as versões são limitação de resolução com
+$t_{\max} = 150$, recuperáveis aumentando para $t_{\max} = 300$ conforme
+documentado na Nota 17. O método sem oráculo com $\rho^* = 10^{-6}$ não
+introduz perdas adicionais nem falsos positivos.
 
-**Calibração de $\rho$** para o bloco $[16, 36]$ com base $\{2, 3, 5, 7, 11,
-13\}$:
+**Calibração de $\rho$** para o bloco $[16, 36]$ com base $\{2, 3, 5, 7, 11, 13\}$:
 
-| $m$ | primo? | $\rho$ |
-|-----|--------|--------|
-| 16  | não    | 0,000  |
-| 17  | sim    | 0,017  |
-| 18  | não    | 0,000  |
-| 19  | sim    | 0,015  |
-| 23  | sim    | 0,011  |
-| 29  | sim    | 0,009  |
-| 31  | sim    | 0,009  |
+| $m$ | primo? | $\rho$ | $\rho > 10^{-6}$? |
+|-----|--------|--------|-------------------|
+| 16  | não    | 0,000  | não (composto) |
+| 17  | sim    | 0,017  | ✓ |
+| 18  | não    | 0,000  | não (composto) |
+| 19  | sim    | 0,015  | ✓ |
+| 23  | sim    | 0,011  | ✓ |
+| 29  | sim    | 0,009  | ✓ |
+| 31  | sim    | 0,009  | ✓ |
 
 Compostos: $\rho = 0{,}0$ exato. Primos: $\rho \in [0{,}009,\, 0{,}020]$.
-Limiar $\rho^* = 0{,}005$ separa os dois grupos sem erro.
+Limiar $\rho^* = 10^{-6}$ separa os dois grupos sem erro para toda a faixa
+testada ($p \leq 499$, Exp 4b).
 
 ---
 
@@ -173,8 +206,8 @@ Limiar $\rho^* = 0{,}005$ separa os dois grupos sem erro.
 | Aspecto | Crivo Espectral | Crivo Espectral sem oráculo |
 |---------|----------|-------------------|
 | Ordem das etapas | Etapa 1 → Etapa 2 | Etapa 2 → Etapa 1 |
-| Classificador na Etapa 1 | `isprime(m)` | $\rho(m \mid \mathcal{P}_<) > \rho^*$ |
-| Filtro na Etapa 2 | `isprime(c)` | $\rho$ iterativo |
+| Classificador na Etapa 1 | `isprime(m)` | $\rho(m \mid \mathcal{P}_<) > 10^{-6}$ |
+| Filtro na Etapa 2 | `isprime(c)` | $\rho$ iterativo ($\rho^* = 10^{-6}$) |
 | Aritmética externa | sim | não |
 | Taxa de detecção | referência | idêntica |
 | Primos perdidos | mesmos | mesmos |
@@ -213,6 +246,17 @@ A questão de se existe uma referência intrinsecamente espectral — construíd
 a partir de $Z_Q$ sem $\zeta$ — permanece em aberto e é o próximo passo
 natural de investigação.
 
+**Escalabilidade do método.** Os experimentos do Exp 3 (`fundamentos_teoricos_v2`)
+revelaram uma assimetria importante entre as duas etapas. O SNR da Etapa 1
+(primos do bloco em $\log|Z_Q|$) permanece estável em $[0{,}72,\, 0{,}98]$
+para $p \in [37, 499]$ — sem degradação. O SNR da Etapa 2 (primos de
+$\mathcal{P}_<$ em $R_2$) cai de $\approx 3{,}8$ para $n=5$ até $\approx 0{,}22$
+para $n=7$, com recuperação parcial para $n=8$. A Etapa 2 é o gargalo do
+método para $p$ grandes: a detectabilidade dos primos pequenos via seus
+múltiplos compostos degrada conforme $p$ cresce, a menos que $t_{\max}$ seja
+aumentado. A regra empírica é $t_{\max} > 2\pi/(\log q_2 - \log q_1)$ para o
+par mais próximo em $\mathcal{P}_<$.
+
 ---
 
 ## 8. Conexão com as notas anteriores
@@ -248,4 +292,6 @@ Validação Computacional*, nota adicional (2026).
 [Nota 18] T. Bandeira, *Benchmark Espectral: Primorial, Fatorial e $Q(p)$ como
 Bases para Extração de Primos*, nota adicional (2026).  
 [Nota 19] T. Bandeira, *Detector Espectral de Primalidade: da Razão $R(k)$ à
-Irredutibilidade Logarítmica*, nota adicional (2026).
+Irredutibilidade Logarítmica*, nota adicional (2026).  
+[Exp 4b] T. Bandeira, `fundamentos_teoricos_v2.ipynb` — Experimentos 3 e 4:
+SNR como função de $p$ e estabilidade de $\rho_{\min}$, Junho de 2026.

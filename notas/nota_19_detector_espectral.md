@@ -7,7 +7,7 @@
 
 ## Resumo
 
-Investigamos três abordagens progressivamente refinadas para detecção espectral do próximo primo a partir de um primo $p$ conhecido, motivadas pela estrutura do extrator $Q(p)$ da Nota 17. A primeira abordagem — razão $R(k) = \log|Z_{Q(p+k)}| - \log|Z_{Q(p)}|$ — falhou por vazamento do sinal do intervalo base. A segunda — regressão linear entre sinais $S_m$ — falhou por ortogonalidade: sinais de frequências distintas são ortogonais sobre $[0, t_{\max}]$. A terceira reformulação, baseada na irredutibilidade de $\log m$ no reticulado gerado por $\{\log p_i\}$, produziu resultados concretos: critério exato com 100% de acurácia (equivalente à definição de primo), resíduo contínuo com 80,1% de separação sem aritmética inteira, e uma correlação negativa inesperada entre resíduo e distância ao primo mais próximo. Esses experimentos revelam uma geometria logarítmica dos primos que conecta diretamente à estrutura do bloco binário de $Q(p)$.
+Investigamos três abordagens progressivamente refinadas para detecção espectral do próximo primo a partir de um primo $p$ conhecido, motivadas pela estrutura do extrator $Q(p)$ da Nota 17. A primeira abordagem — razão $R(k) = \log|Z_{Q(p+k)}| - \log|Z_{Q(p)}|$ — falhou por vazamento do sinal do intervalo base, mas produziu como subproduto uma tabela estendida de $t_{\min}$ para pares de primos gêmeos (Exp 1b, `fundamentos_teoricos_v2`), confirmando crescimento $\sim p/\log p$ até $p = 463$ com $t_{\min} = 1451{,}4$. A segunda — regressão linear entre sinais $S_m$ — falhou por ortogonalidade: sinais de frequências distintas são ortogonais sobre $[0, t_{\max}]$. A terceira reformulação, baseada na irredutibilidade de $\log m$ no reticulado gerado por $\{\log p_i\}$, produziu resultados concretos: critério exato com 100% de acurácia (equivalente à definição de primo), resíduo contínuo com 80,1% de separação sem aritmética inteira, e uma correlação negativa inesperada entre resíduo e distância ao primo mais próximo. Esses experimentos revelam uma geometria logarítmica dos primos que conecta diretamente à estrutura do bloco binário de $Q(p)$.
 
 ---
 
@@ -43,7 +43,7 @@ $R(k) = \log|Z_{Q(p+k)}| - \log|Z_{Q(p)}|$ inclui a diferença de dois intervalo
 
 O experimento produziu um resultado útil sobre a Questão 1 da Nota 18. O SNR (amplitude do primo / amplitude do composto na frequência alvo) ficou entre 1,22 e 1,77 para $t_{\max} \in [50, 300]$ — essencialmente estável. Aumentar $t_{\max}$ eleva as amplitudes proporcionalmente mas não melhora a discriminação. A separação é estrutural, não de resolução.
 
-Adicionalmente, o $t_{\min}$ teórico necessário para separar primos gêmeos consecutivos cresce claramente com $p$:
+Adicionalmente, o $t_{\min}$ teórico necessário para separar primos gêmeos consecutivos cresce claramente com $p$. A tabela abaixo combina os casos originais com os dados do Exp 1b (`fundamentos_teoricos_v2`), cobrindo a faixa até $p = 463$:
 
 | Par $(p, p')$ | Gap | $t_{\min} = 2\pi/(\log p' - \log p)$ | Status ($t_{\max}=150$) |
 |---|---|---|---|
@@ -52,8 +52,16 @@ Adicionalmente, o $t_{\min}$ teórico necessário para separar primos gêmeos co
 | $(59, 61)$ | 2 | 188,5 | **Insuficiente** |
 | $(71, 73)$ | 2 | 226,2 | **Insuficiente** |
 | $(97, 101)$ | 4 | 155,5 | **Insuficiente** |
+| $(107, 109)$ | 2 | 339,3 | **Insuficiente** |
+| $(137, 139)$ | 2 | 434,8 | **Insuficiente** |
+| $(191, 193)$ | 2 | 607,2 | **Insuficiente** |
+| $(239, 241)$ | 2 | 757,7 | **Insuficiente** |
+| $(281, 283)$ | 2 | 891,2 | **Insuficiente** |
+| $(311, 313)$ | 2 | 986,5 | **Insuficiente** |
+| $(419, 421)$ | 2 | 1330,4 | **Insuficiente** |
+| $(461, 463)$ | 2 | 1451,4 | **Insuficiente** |
 
-Para gap fixo igual a 2, $t_{\min}$ cresce como $\sim p / \log p$ — confirmando empiricamente a Questão 1 da Nota 18: separação de primos gêmeos requer $t_{\max}$ crescente com $p$.
+Para gap fixo igual a 2, $t_{\min}$ cresce como $\sim p / \log p$ — confirmando empiricamente a Questão 1 da Nota 18: separação de primos gêmeos requer $t_{\max}$ crescente com $p$. O Exp 1b quantifica essa escala concretamente: para $p \approx 460$, separar o par gêmeo mais próximo já exige $t_{\max} > 1451$, um fator de $\approx 10 \times$ acima do padrão de $t_{\max} = 150$.
 
 ---
 
@@ -148,8 +156,8 @@ O pipeline espectral está, portanto, implementando implicitamente o critério d
 
 ## 6. Questões abertas
 
-**Questão 1 — Crescimento do resíduo contínuo com $p$.**
-Os dados mostram resíduo médio dos primos em 0.01484 para $m \in [4, 149]$. Esse valor cresce com $m$? Se $\rho(p) \to \infty$ com $p$, primos ficam progressivamente mais "irredutíveis" no espaço logarítmico — o que conecta à hipótese de ruído proporcional da Nota 18 (SNR crescente com $p$ no bloco de $Q$).
+**Questão 1 — Crescimento do resíduo contínuo com $p$** *(com evidência adicional).*
+Os dados mostram resíduo médio dos primos em 0.01484 para $m \in [4, 149]$. A tabela estendida de $t_{\min}$ (Seção 2.4, Exp 1b) fornece evidência indireta: $t_{\min}$ cresce como $\sim p/\log p$ para pares gêmeos, implicando que a separabilidade espectral *entre dois primos consecutivos* exige recursos crescentes. O resíduo $\rho(p)$ no espaço logarítmico e o $t_{\min}$ espectral medem estruturas complementares da mesma geometria — um no espaço dos logs, outro no tempo de observação. A questão precisa — se $\rho(p) \to \infty$ ou estabiliza — permanece em aberto, mas os dados do Exp 4b (Nota 20) mostram que $\rho_{\min}$ dos primos do bloco *decai* com $p$, sugerindo que primos grandes são logaritmicamente mais próximos do reticulado dos primos menores, não mais distantes.
 
 **Questão 2 — Separabilidade assintótica.**
 Com 80,1% de acurácia em $[4, 149]$, o resíduo contínuo já é informativo sem aritmética inteira. Essa acurácia cresce, decresce ou estabiliza em faixas maiores? A sobreposição entre as distribuições de $\rho$ para primos e compostos diminui com $m$?
@@ -174,4 +182,6 @@ O resultado mais rico não é a taxa de acerto, mas a correlação negativa entr
 
 [Nota 17] T. Bandeira, *Ferramenta Espectral via $Q(p)$: Fundamentação e Validação Computacional*, nota adicional (2026).  
 [Nota 18] T. Bandeira, *Benchmark Espectral: Primorial, Fatorial e $Q(p)$ como Bases para Extração de Primos*, nota adicional (2026).  
-[Nota 1] T. Bandeira, *Uma caracterização de primalidade via partições binárias e MDC em intervalos reduzidos*, nota standalone (2026).
+[Nota 20] T. Bandeira, *Crivo Espectral sem Oráculo de Primalidade*, nota adicional (2026).  
+[Nota 1] T. Bandeira, *Uma caracterização de primalidade via partições binárias e MDC em intervalos reduzidos*, nota standalone (2026).  
+[Exp 1b] T. Bandeira, `fundamentos_teoricos_v2.ipynb` — $t_{\min}$ para pares de primos gêmeos até $p = 463$, Junho de 2026.
