@@ -2,7 +2,8 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602446.svg)](https://doi.org/10.5281/zenodo.20602446)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602446.svg)](https://doi.org/10.5281/zenodo.20636392)
+
 
 ---
 
@@ -154,7 +155,7 @@ O cálculo de $\zeta(1/2 + it)$ via mpmath é o gargalo computacional (~8–15s 
 ```
 T. Bandeira, "Análise Espectral de Primos via Produtos de Intervalos Binários",
 notas de pesquisa independente, 2026.
-DOI: 10.5281/zenodo.20602446
+DOI: 10.5281/zenodo.20636392
 ```
 
 ---
