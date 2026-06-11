@@ -74,7 +74,7 @@ Compara as três funções como base para extração espectral ($p \in \{37, 41,
 | Função | Taxa média | Tempo médio |
 |--------|-----------|-------------|
 | $Q(p)$ | **97,8%** | **0,08 s** |
-| Primorial $P\#$ | 92,0% | 0,12 s |
+| Primorial P# | 92,0% | 0,12 s |
 | Fatorial $(p-1)!$ | 31,3% | 5,46 s |
 
 $Q(p)$ supera inclusive o primorial. Na faixa $f \in [0.4, 0.6]$ (bloco binário), exibe picos quase periódicos de alta nitidez ausentes nos outros extratores — o recorte binário atua como filtro natural de banda passante.
@@ -83,21 +83,21 @@ Resultados do `fundamentos_teoricos_v2.ipynb` (Exp 3 e 4b) respondem as questõe
 
 ### Nota 19 — Detector Espectral de Primalidade: da Razão $R(k)$ à Irredutibilidade Logarítmica
 
-Três abordagens progressivas para detecção do próximo primo sem oráculo. A formulação final: $m$ é primo $\iff$ $\log m$ é irredutível no reticulado $\mathbb{Z}$-gerado por $\{\log p_i : p_i < m\}$. O resíduo contínuo $\rho(m)$ atinge 80,1% de separação sem aritmética inteira. Resultado inesperado: correlação negativa entre $\rho(m)$ e distância ao primo mais próximo (Spearman $-0.45$) — compostos próximos de primos têm resíduo *maior*, não menor.
+Três abordagens progressivas para detecção do próximo primo sem oráculo. A formulação final: $m$ é primo $\iff$ $\log m$ é irredutível no reticulado inteiro gerado por $\{\log p_i : p_i < m\}$. O resíduo contínuo $\rho(m)$ atinge 80,1% de separação sem aritmética inteira. Resultado inesperado: correlação negativa entre $\rho(m)$ e distância ao primo mais próximo (Spearman $-0.45$) — compostos próximos de primos têm resíduo *maior*, não menor.
 
 Contém tabela empírica de $t_{\min}$ para pares gêmeos até $(461, 463)$, confirmando crescimento $\sim p / \log p$.
 
 ### Nota 20 — Crivo Espectral sem Oráculo de Primalidade
 
-Elimina `isprime()` substituindo-o pelo critério $\rho(m \mid \mathcal{P}_{<}) > \rho^*$. O critério é exato: todo composto em $[2^{n-1}, p-1]$ tem todos os seus fatores primos em $\mathcal{P}_{<} = \{q \text{ primo} : q < 2^{n-1}\}$, portanto $\rho = 0$ exatamente para compostos. O pipeline inverte a ordem das etapas (Etapa 2 → Etapa 1): $\mathcal{P}_{<}$ é extraída primeiro e fornece a base para o classificador $\rho$ na Etapa 1. Validado para $p \in \{37, 41, 53, 59, 67\}$.
+Elimina `isprime()` substituindo-o pelo critério $\rho(m \mid P_<) > \rho^*$, onde $P_< = \{q : q \text{ primo}, q < 2^{n-1}\}$. O critério é exato pelo Corolário do Teorema 1 dos blocos binários: todo composto em $[2^{n-1}, p-1]$ tem todos os seus fatores primos em $P_<$, portanto $\rho = 0$ exatamente para compostos. O pipeline inverte a ordem das etapas (Etapa 2 → Etapa 1): $P_<$ é extraída primeiro e fornece a base para o classificador $\rho$ na Etapa 1. Validado para $p \in \{37, 41, 53, 59, 67\}$.
 
 ### Nota 21 — Formalização do Crivo Espectral Oracle-Free *(nova)*
 
 Formaliza a teoria a partir de uma definição central — Redutibilidade Logarítmica — da qual todos os resultados derivam. Estrutura:
 
 - **Proposição:** $m$ é logaritmicamente irredutível $\iff$ $m$ é primo (prova via TFA)
-- **Lema $\rho$:** $\rho(m \mid \mathcal{P}_{<}) = 0 \iff m$ é composto no bloco (corolário do Teorema 1 da Nota MDC)
-- **Teorema de Invariância:** $\mathcal{R}_m$ remove a contribuição de $m$ sem afetar nenhum primo $q \neq m$, no limite $T \to \infty$ (prova via ortogonalidade das funções de Dirichlet)
+- **Lema $\rho$:** $\rho(m \mid P_<) = 0 \iff m$ é composto no bloco (corolário do Teorema 1 da Nota MDC)
+- **Teorema de Invariância:** $R_m$ remove a contribuição de $m$ sem afetar nenhum primo $q \neq m$, no limite $T \to \infty$ (prova via ortogonalidade das funções de Dirichlet)
 - **Corolário:** após eliminação iterativa dos redutíveis, os sobreviventes são exatamente os primos do bloco
 
 A FFT não é objeto da teoria — é o instrumento que implementa o Corolário na prática.
