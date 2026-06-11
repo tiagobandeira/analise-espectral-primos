@@ -2,7 +2,7 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602446.svg)](https://doi.org/10.5281/zenodo.20636392)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20636392.svg)](https://doi.org/10.5281/zenodo.20636392)
 
 
 ---
