@@ -2,7 +2,7 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20648983.svg)](https://doi.org/10.5281/zenodo.20648983)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.20666130)
 
 ---
 
@@ -242,7 +242,7 @@ A natureza do critério $\rho_B$ está completamente esclarecida (Nota 26): é u
 ```
 T. Bandeira, "Análise Espectral de Primos via Produtos de Intervalos Binários",
 notas de pesquisa independente, 2026.
-DOI: 10.5281/zenodo.20648983
+DOI: 10.5281/zenodo.20666130
 ```
 
 ---
