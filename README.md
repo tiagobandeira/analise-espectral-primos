@@ -2,7 +2,7 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.20666130)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.20674285)
 
 ---
 
@@ -88,7 +88,7 @@ O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutur
   author = {T. Bandeira},
   title = {Análise Espectral de Primos via Produtos de Intervalos Binários},
   year = {2026},
-  doi = {10.5281/zenodo.20666130}
+  doi = {10.5281/zenodo.20674285}
 }
 ```
 
