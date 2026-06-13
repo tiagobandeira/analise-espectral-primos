@@ -13,7 +13,7 @@ A partir da análise espectral do produto $Q(p) = \prod_{x=2^{n-1}}^{p-1} x$ (bl
 O método resultante é um crivo autônomo de dois estágios:
 
 1. **Recursão sobre blocos binários** – constrói todos os primos menores que $2^{n-1}$ usando apenas divisibilidade e os primos já encontrados (indutivamente).
-2. **Classificação do bloco $[2^{n-1}, p-1]$** – cada candidato é testado por divisibilidade pelos primos obtidos na etapa 1. A correção é garantida pelo Teorema 1 da Nota MDC: todo composto no bloco tem seu menor fator primo em $\mathcal{P}_<$ (conjunto dos primos $< 2^{n-1}$).
+2. **Classificação do bloco $[2^{n-1}, p-1]$** – cada candidato é testado por divisibilidade pelos primos obtidos na etapa 1. A correção é garantida pelo Teorema 1 da Nota MDC: todo composto no bloco tem seu menor fator primo em $\mathcal{P_<}$ (conjunto dos primos $< 2^{n-1}$).
 
 Nenhuma dependência externa é necessária: sem $\zeta(s)$, sem `isprime()`, sem lista prévia de primos.
 
@@ -69,7 +69,7 @@ Testado para $p$ até 1009 com 100% de acurácia (0 falsos positivos, 0 falsos n
 
 ## Papel da teoria espectral
 
-O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutura de blocos binários, o critério de irredutibilidade logarítmica e a justificativa formal para os parâmetros do algoritmo. Sem ele, não haveria motivo para adotar a partição em blocos $A_k = [2^k, 2^{k+1}-1]$ nem prova de que $\mathcal{P}_<$ é a base exata para classificar o bloco. A FFT e $t_{\max}$ foram substituídas por aritmética onde eram ineficientes, mas a teoria permaneceu.
+O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutura de blocos binários, o critério de irredutibilidade logarítmica e a justificativa formal para os parâmetros do algoritmo. Sem ele, não haveria motivo para adotar a partição em blocos $A_k = [2^k, 2^{k+1}-1]$ nem prova de que $\mathcal{P_<}$ é a base exata para classificar o bloco. A FFT e $t_{\max}$ foram substituídas por aritmética onde eram ineficientes, mas a teoria permaneceu.
 
 ---
 
