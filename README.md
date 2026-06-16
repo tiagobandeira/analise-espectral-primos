@@ -18,6 +18,7 @@ O método resultante é um crivo autônomo de dois estágios:
 Nenhuma dependência externa é necessária: sem $\zeta(s)$, sem `isprime()`, sem lista prévia de primos.
 
 ---
+> **Descoberta recente (Nota 33):** Com resolução espectral suficiente (`T_max = 6500` para primos até 299), a amplitude normalizada em `f_{p+2}` separa completamente pares gêmeos de pares mistos (acurácia 100%, 62/62, Mann‑Whitney p < 10⁻¹⁰). Para `T_max` fixo (1500), a acurácia cai para 51,6% – indistinguível do acaso. O resultado confirma que a irredutibilidade logarítmica de primos se manifesta localmente no espectro e que a resolução espectral é o gargalo determinante.
 
 ## Evolução teórica
 
@@ -75,9 +76,10 @@ O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutur
 
 ## Questões abertas
 
-1. **Escala de $t_{\max}$ para primos gêmeos** – evidência empírica sugere $t_{\min} \sim O(p/\log p)$; demonstração analítica em aberto.
-2. **Detecção de fatores por ressonância espectral** – sem divisibilidade, seria possível identificar fatores comuns apenas pela interferência de picos? (Hipótese B, Nota 20.)
-3. **Prova formal do padrão de $\rho_{\min}(k)$** – o maior primo do bloco sempre realiza o menor $\rho$; observado até $k=11$, mas não provado.
+> 1. **Lei de escala de `T_max` para classificação de pares.** A separação perfeita entre gêmeos e mistos exige `T_max` muito maior que `π p`. Experimentos indicam crescimento mais rápido que linear (`T_max = 6500` para `p ≤ 299`). A caracterização analítica dessa escala permanece em aberto.
+> 2. **Detecção de fatores por ressonância espectral** – sem divisibilidade, seria possível identificar fatores comuns apenas pela interferência de picos? (Hipótese B, Nota 20.)
+> 3. **Prova formal do padrão de `ρ_min(k)`** – o maior primo do bloco sempre realiza o menor `ρ`; observado até `k=11`, mas não provado.
+> 4. **Universalidade da assinatura de gêmeos.** A separação espectral foi verificada apenas até `p ≤ 299`. Testes para primos muito maiores, com `T_max` escalado adequadamente, são necessários para confirmar a robustez do critério (Exp DD proposto).
 
 ---
 
