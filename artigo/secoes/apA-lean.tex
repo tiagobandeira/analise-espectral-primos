@@ -1,0 +1,106 @@
+% ===========================================================================
+\section{Os enunciados verificados}\label{ap:lean}
+% ===========================================================================
+
+Reproduzimos aqui os enunciados das declarações verificadas em Lean~4, em notação
+matemática. O código-fonte completo, com as demonstrações, está em
+\path{formalizacao/Espectral/Bloco.lean} e
+\path{formalizacao/Espectral/Rho.lean}, no material suplementar; os nomes das
+declarações são os que aparecem nos títulos abaixo.
+
+\subsection*{Lema do bloco (\texttt{existe\_fator\_primo\_na\_semente})}
+
+\noindent Para todo $k\ge1$ e todo $m$ inteiro,
+\[
+  2^k \le m < 2^{k+1} \ \wedge\ \lnot\,\mathrm{Primo}(m)
+  \;\Longrightarrow\;
+  \exists p,\ \mathrm{Primo}(p)\ \wedge\ p\mid m\ \wedge\ p<2^k .
+\]
+
+\subsection*{Crivo por blocos (\texttt{bloco\_primo\_iff})}
+
+\noindent Para todo $k\ge1$ e todo $m$ com $2^k\le m<2^{k+1}$,
+\[
+  \mathrm{Primo}(m)
+  \;\Longleftrightarrow\;
+  \forall p,\ \mathrm{Primo}(p)\ \wedge\ p\mid m \ \Rightarrow\ 2^k\le p .
+\]
+
+\subsection*{Irredutibilidade logarítmica (\texttt{logRedutivel\_iff})}
+
+\noindent Um inteiro $m$ é \emph{logaritmicamente redutível} se existem um
+conjunto finito $s$ de primos, expoentes $e\colon s\to\N_{>0}$ e a identidade
+$\log m=\sum_{p\in s}e(p)\log p$ com $p<m$ para todo $p\in s$. O enunciado
+verificado é: para todo $m\ge2$,
+\[
+  \mathrm{LogRedutivel}(m)
+  \;\Longleftrightarrow\;
+  \lnot\,\mathrm{Primo}(m).
+\]
+
+\subsection*{Vizinho inteiro (\texttt{log\_dist\_ge}, \texttt{log\_dist\_succ\_eq})}
+
+\noindent Para inteiros $q,m\ge2$ com $m\neq q$,
+\[
+  \log(q+1)-\log q \;\le\; \bigl|\log q-\log m\bigr| ,
+\]
+e a igualdade vale para $m=q+1$:
+\[
+  \bigl|\log q-\log(q+1)\bigr| \;=\; \log(q+1)-\log q .
+\]
+
+\subsection*{Desigualdade auxiliar (\texttt{inv\_succ\_le\_log\_ratio})}
+
+\noindent Para todo inteiro $q\ge1$,
+\[
+  \frac{1}{q+1} \;\le\; \log(q+1)-\log q .
+\]
+
+\subsection*{Cota uniforme (\texttt{cota\_rho})}
+
+\noindent Para $k\ge1$, $q$ primo com $2^k\le q<2^{k+1}$ e $m\ge2$ com $m\neq q$,
+\[
+  \frac{1}{2^{k+1}(k+1)\log 2}
+  \;\le\;
+  \frac{\bigl|\log q-\log m\bigr|}{\log q} .
+\]
+Como $\rB(q)$ é o mínimo dessa quantidade sobre os inteiros do reticulado, a
+desigualdade implica a cota do Teorema~\ref{teo:cota}.
+
+\subsection*{Monotonia da cota (\texttt{cota\_antitone})}
+
+\noindent Para $1\le k\le k'$,
+\[
+  \frac{1}{2^{k'+1}(k'+1)\log 2}
+  \;\le\;
+  \frac{1}{2^{k+1}(k+1)\log 2} .
+\]
+Ou seja: a cota do Teorema~\ref{teo:cota} — e com ela a margem que separa primos
+de compostos — decresce com o tamanho do bloco, como o
+Corolário~\ref{cor:assint} quantifica.
+
+\subsection*{O que não está coberto}
+
+A igualdade do Teorema~\ref{teo:exato} na forma completa exigiria definir $\rB$
+como mínimo sobre um conjunto de números suaves, o que exige decidir suavidade em
+tempo de prova. Formalizamos as duas metades que a demonstração usa — a cota
+inferior para todo inteiro e o fato de a cota ser atingida em $q+1$ —, que é o
+conteúdo matemático; o passo final, ``logo o mínimo é esse valor'', é imediato no
+papel e verificado numericamente na Tabela~\ref{tab:dadosrho}. O
+Lema~\ref{lema:qmaisum} (suavidade de $q+1$) também ficou no papel: é aritmética
+elementar, mas exige a maquinaria de fatoração da biblioteca.
+
+\subsection*{Como compilar}
+
+\begin{center}
+\begin{minipage}{0.9\textwidth}
+\begin{verbatim}
+cd formalizacao
+lake exe cache get     # oleans pré-compilados do Mathlib (~1 GB)
+lake build
+\end{verbatim}
+\end{minipage}
+\end{center}
+
+\noindent A formalização usa \texttt{leanprover/lean4:v4.37.0-rc1} com Mathlib. As
+três compilações terminam sem erros e sem avisos; não há \texttt{sorry}.

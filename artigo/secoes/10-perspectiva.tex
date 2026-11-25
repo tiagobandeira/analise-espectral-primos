@@ -1,0 +1,91 @@
+% ===========================================================================
+\section{O que a representação sugere}\label{sec:perspectiva}
+% ===========================================================================
+
+\subsection{O dicionário em resumo}
+
+O artigo construiu uma tradução e mediu suas consequências. A tabela abaixo
+resume o que foi traduzido.
+
+\begin{center}
+\small
+\begin{tabular}{ll}
+\toprule
+aritmética & reta (frequência) \\
+\midrule
+inteiro $m$ & ponto $\nfreq m=\log m$ \\
+produto $mn$ & soma $\nfreq m+\nfreq n$ \\
+$B$-suavidade & pertencer ao reticulado $\Lat(B)$ \\
+ser composto & ser soma de geradores \\
+ser primo & ser irredutível \\
+divisibilidade por $p$ & pertencer a $\Lat(\{p\})$ \\
+semente $\Seed_k$ & reticulado do bloco anterior \\
+margem de classificação & $\rB_{\min}(k)=g(q_k)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Nenhuma linha dessa tabela é profunda isoladamente: todas são o Teorema
+Fundamental da Aritmética visto por logaritmos. O que a tabela oferece é uma
+\emph{linguagem}, e a linguagem tem consequências que a notação multiplicativa não
+tem: ela permite falar de distância, de resolução, de superposição e de contagem.
+Os Teoremas~\ref{teo:exato} e \ref{teo:custo} e as
+Proposições~\ref{prop:ganho} e \ref{prop:gemeo} são exemplos dessas consequências.
+
+\subsection{Perguntas que ficam}
+
+\paragraph{Outras bases.} A partição binária não é a única possível. Para uma base
+$b\ge2$, o bloco $[b^k,b^{k+1})$ tem comprimento $b^k(b-1)$, e o menor fator de um
+composto é $<b^{(k+1)/2}$; a semente correspondente é $\{p<b^k\}$. O análogo do
+Teorema~\ref{teo:cota} vale com $b$ no lugar de $2$, mas a geometria muda: a
+margem passa a depender de $b$, e não sabemos se o análogo do
+Teorema~\ref{teo:exato} vale para $b>2$ — o vizinho $q+1$ deixa de estar sempre no
+reticulado quando $q$ não é ímpar.
+
+\paragraph{Outros crivos.} O crivo de Eratóstenes é o que a partição binária
+organiza. O que acontece com crivos de roda (\emph{wheel sieves}), que riscam
+múltiplos de vários primos de uma vez? A imagem correspondente seria uma soma de
+tons em frequências de produtos, e a contagem coerente sugere que a altura dos
+picos mediria quantos candidatos caem em cada classe residual.
+
+\paragraph{Órbitas e a função de Dickman.} A contagem $k_r$ da
+Proposição~\ref{prop:ganho} é o tamanho de uma órbita $\mathcal O_r$. Para $P$ fixo
+e $m\le X$, essa contagem é o número de inteiros de $\mathcal O_r$ abaixo de $X$,
+que é exatamente o objeto da teoria de números suaves e da função de
+Dickman--de Bruijn $\Psi(X,y)$ \cite{tenenbaum}. A representação espectral dá a
+$\Psi$ uma leitura: a altura do pico em $\freq r$ é $\Psi$-local.
+
+\paragraph{A assinatura de pares gêmeos.} A Proposição~\ref{prop:gemeo} dá a lei
+$q/T$ para o fundo. A constante ótima — a que aparece na
+Tabela~\ref{tab:gemeos} como fator entre $q/T$ e o máximo medido, da ordem de
+$1{,}8$ — não foi determinada. Determiná-la exigiria controlar a interferência
+conjunta de todos os primos do sinal, e não só do vizinho imediato.
+
+\paragraph{Aplicações visuais.} As figuras deste artigo foram feitas para serem
+olhadas, mas cada uma delas é o resultado de um cálculo simples e curto. Um
+instrumento interativo — em que o leitor escolhe $p$, o número de primos, a janela
+e a faixa de leitura — permitiria percorrer a transição entre ``os pares se
+fundem'' e ``os pares se separam'' que a Figura~\ref{fig:resolucao} mostra em dois
+instantâneos. A Proposição~\ref{prop:janela} dá o critério exato para colorir essa
+transição.
+
+\subsection{O que este artigo não é}
+
+Vale ser explícito sobre o alcance do que foi feito, para que o leitor saiba o que
+esperar daqui.
+
+A representação é fiel: os primos de um bloco aparecem como picos isolados, e
+cada afirmação estrutural sobre eles tem uma tradução geométrica exata. Mas ela
+não é um algoritmo competitivo. A aritmética decide em $O(\sqrt m)$ o que a
+imagem exige uma janela de tamanho $\Theta(m)$ para mostrar
+(Corolário~\ref{cor:local}). O valor do dicionário está em outro lugar: em tornar
+visíveis relações que a notação multiplicativa esconde, e em dar a cada uma delas
+uma lei quantitativa.
+
+É, nesse sentido, o tipo de matemática que se faz para entender uma estrutura, e
+não para calcular com ela. A estrutura em questão — a irredutibilidade dos
+inteiros — é bem conhecida; o que é novo aqui é o ângulo, e o que o ângulo revela
+são grandezas que não apareciam antes: a margem $g(q_k)$, o comprimento
+$\tau(\Seed_k)$, o contraste $T/q$. Essas grandezas são as mesmas que governam
+qualquer tentativa de ler aritmética por frequência, e é por isso que vale
+registrá-las.

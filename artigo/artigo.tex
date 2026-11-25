@@ -1,0 +1,169 @@
+% ---------------------------------------------------------------------------
+%  Uma representação espectral da aritmética
+%  primos, compostos e crivos em frequência
+%
+%  T. Bandeira, 2026
+%
+%  Compilar com:  pdflatex --enable-installer artigo.tex   (duas vezes)
+% ---------------------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\geometry{margin=3.0cm}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,width=0.92\textwidth}
+
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!55!black]{hyperref}
+\usepackage{url}
+
+\usepackage{csquotes}
+
+% --------------------------------------------------------------- ambientes
+\theoremstyle{plain}
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{proposicao}[teorema]{Proposição}
+\newtheorem{corolario}[teorema]{Corolário}
+
+\theoremstyle{definition}
+\newtheorem{definicao}[teorema]{Definição}
+\newtheorem{exemplo}[teorema]{Exemplo}
+\newtheorem{problema}[teorema]{Problema}
+
+\theoremstyle{remark}
+\newtheorem{observacao}[teorema]{Observação}
+
+\renewcommand{\proofname}{Demonstração}
+
+% --------------------------------------------------------------- macros
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\Seed}{\mathcal{S}}
+\newcommand{\Lat}{\Lambda}
+\newcommand{\PiBloco}{\Pi_k}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\amp}{amp}
+\DeclareMathOperator{\iso}{iso}
+\DeclareMathOperator{\nuc}{nuc}
+\DeclareMathOperator{\Supp}{supp}
+\newcommand{\freq}[1]{f_{#1}}
+\newcommand{\nfreq}[1]{\nu_{#1}}
+\newcommand{\rB}{\rho}
+
+\setlength{\parskip}{0pt}
+\setlength{\abovedisplayskip}{6pt}
+\setlength{\belowdisplayskip}{6pt}
+
+% --------------------------------------------------------------- título
+\title{\bfseries Uma representação espectral da aritmética\\[0.35em]
+\large primos, compostos e crivos em frequência}
+
+\author{T. Bandeira\thanks{%
+Material suplementar, incluindo código, figuras em alta resolução e a
+formalização em Lean~4, disponível em
+\url{https://github.com/tiagobandeira/analise-espectral-primos}.}}
+
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+A fatoração de um inteiro é uma relação aditiva entre logaritmos. Este artigo
+desenvolve essa observação como um dicionário sistemático entre a aritmética
+multiplicativa de $\N$ e a geometria aditiva da reta real: cada inteiro $m\ge2$
+recebe a frequência $\nfreq{m}=\log m$, a multiplicação vira soma, e a
+irredutibilidade de $m$ em relação a um conjunto de primos vira a distância de
+$\nfreq{m}$ a um reticulado. Mostramos que a partição em blocos binários
+$A_k=[2^k,2^{k+1})$ torna esse dicionário computável: um composto de $A_k$ tem
+necessariamente um fator primo abaixo de $2^k$, de modo que o bloco anterior é a
+base canônica para classificar o seguinte. Determinamos então a geometria exata do
+reticulado: para todo primo $q$ de $A_k$, a distância relativa de $\nfreq{q}$ ao
+reticulado gerado pelos primos menores vale \emph{exatamente}
+$\log(1+1/q)/\log q$, e o mínimo sobre o bloco é atingido no maior primo, com valor
+assintótico $1/(q\log q)$. A demonstração é elementar e repousa num único fato: os
+dois vizinhos inteiros de um primo ímpar são compostos, logo ambos pertencem ao
+reticulado. Sobre essa base construímos três retratos espectrais: o desenho do
+crivo num bloco (onde os primos aparecem como picos isolados e os compostos
+desaparecem por subtração), a lei de resolução que governa o custo desse desenho
+($t_{\max}=\Theta(2^n/n)$, e no nível local $\Theta(q)$), e o fenômeno de
+\emph{contagem coerente}, em que $k$ candidatos com o mesmo núcleo produzem
+amplitude exatamente $k$ vezes a de um só — um dispositivo de contagem inteira
+realizado por superposição de Fourier. Fechamos com a assinatura espectral de um
+par de primos e com as questões que a representação sugere.
+\end{abstract}
+
+\vspace{0.4em}
+\noindent\textbf{Palavras-chave:} logaritmos, reticulados, números suaves, crivo,
+transformada de Fourier, análise espectral.
+
+\vspace{0.2em}
+\noindent\textbf{MSC 2020:} 11A41, 11N35, 42A16.
+
+\tableofcontents
+
+\bigskip
+
+\input{secoes/01-intro}
+\input{secoes/02-dicionario}
+\input{secoes/03-blocos}
+\input{secoes/04-geometria}
+\input{secoes/05-desenho}
+\input{secoes/06-resolucao}
+\input{secoes/07-contagem}
+\input{secoes/08-assinatura}
+\input{secoes/09-verificacao}
+\input{secoes/10-perspectiva}
+
+\appendix
+\input{secoes/apA-lean}
+\input{secoes/apB-numeros}
+
+\begin{thebibliography}{99}
+
+\bibitem{baker} A.~Baker, \emph{Transcendental Number Theory},
+Cambridge University Press, 1975.
+
+\bibitem{hildebrand} A.~J.~Hildebrand, G.~E.~Andrews, \emph{Number Theory},
+Dover, 1994.
+
+\bibitem{lang} S.~Lang, \emph{Algebraic Number Theory}, 2.~ed.,
+Springer, 1994.
+
+\bibitem{montgomery} H.~L.~Montgomery, R.~C.~Vaughan,
+\emph{Multiplicative Number Theory I: Classical Theory},
+Cambridge University Press, 2007.
+
+\bibitem{tenenbaum} G.~Tenenbaum, \emph{Introduction to Analytic and
+Probabilistic Number Theory}, 3.~ed., American Mathematical Society, 2015.
+
+\bibitem{titchmarsh} E.~C.~Titchmarsh, \emph{The Theory of the Riemann
+Zeta-Function}, 2.~ed., Oxford University Press, 1986.
+
+\bibitem{korner} T.~W.~K\"orner, \emph{Fourier Analysis}, Cambridge
+University Press, 1988.
+
+\bibitem{mathlib} The Mathlib Community, \emph{The Lean Mathematical Library},
+in: Proceedings of CPP 2020, ACM, 2020.
+
+\end{thebibliography}
+
+\end{document}

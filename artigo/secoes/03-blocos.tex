@@ -1,0 +1,164 @@
+% ===========================================================================
+\section{O crivo como partição binária}\label{sec:blocos}
+% ===========================================================================
+
+\subsection{Por que partir em blocos}
+
+Para usar o dicionário é preciso escolher um reticulado — isto é, um conjunto
+finito de primos. Qual? A resposta clássica vem da fatoração: se $m$ é composto,
+o menor fator primo de $m$ não excede $\sqrt m$. Logo, para classificar $m$,
+basta conhecer os primos até $\sqrt m$. O problema é que $\sqrt m$ depende de
+$m$, e um reticulado que muda a cada inteiro não tem geometria.
+
+Os blocos binários resolvem isso tornando o limite uniforme.
+
+\begin{definicao}\label{def:bloco}
+Para $k\ge1$, o \emph{bloco binário} de índice $k$ é
+\[
+  A_k \;=\; [\,2^k,\;2^{k+1}) \;=\; \{2^k, 2^k+1,\dots, 2^{k+1}-1\},
+\]
+que tem exatamente $2^k$ elementos. Denotamos por $\Pi_k$ o conjunto dos primos
+de $A_k$ e por $\Seed_k$ a \emph{semente} de nível $k$,
+\[
+  \Seed_k \;=\; \{p \text{ primo} : p < 2^k\} .
+\]
+\end{definicao}
+
+A semente é a união dos primos dos blocos anteriores:
+$\Seed_k=\Pi_1\cup\Pi_2\cup\cdots\cup\Pi_{k-1}$ para $k\ge2$, com
+$\Pi_1=\{2,3\}$. É essa identidade que faz da partição binária a partição
+adaptada ao crivo.
+
+\subsection{O lema do bloco}
+
+\begin{lema}[fator pequeno]\label{lema:bloco}
+Seja $k\ge1$ e $m\in A_k$ composto. Então $m$ tem um fator primo $q<2^k$.
+\end{lema}
+
+\begin{proof}
+Seja $q$ o menor fator primo de $m$ e escreva $m=qs$ com $s\ge q$ (o cofator é no
+mínimo $q$ porque todos os seus fatores primos são $\ge q$). Então
+\[
+  q^2 \;\le\; qs \;=\; m \;<\; 2^{k+1},
+\]
+donde $q<2^{(k+1)/2}$. Como $k\ge1$ implica $(k+1)/2\le k$, segue $q<2^k$.
+\end{proof}
+
+O Lema~\ref{lema:bloco} é o único ingrediente estrutural de toda a teoria que
+segue. Ele diz que os divisores que decidem a primalidade de um elemento do bloco
+$k$ estão \emph{estritamente abaixo} do bloco — nunca dentro dele. É isso que
+permite construir a base por indução, sem circularidade.
+
+\begin{teorema}[crivo por blocos]\label{teo:crivo}
+Seja $k\ge1$ e $m\in A_k$. Então $m$ é primo se, e somente se, nenhum elemento
+de $\Seed_k$ divide $m$.
+\end{teorema}
+
+\begin{proof}
+Se $p\in\Seed_k$ divide o primo $m$, então $p=m$; mas $p<2^k\le m$, contradição.
+Reciprocamente, se nenhum $p\in\Seed_k$ divide $m$ e $m$ fosse composto, o
+Lema~\ref{lema:bloco} produziria um fator primo $q<2^k$, isto é, $q\in\Seed_k$,
+dividindo $m$.
+\end{proof}
+
+\begin{corolario}[recursão]\label{cor:recursao}
+Para $k\ge1$, $\Pi_k$ é exatamente o conjunto dos $m\in A_k$ que não são
+divisíveis por nenhum elemento de $\Seed_k=\Pi_1\cup\cdots\cup\Pi_{k-1}$. Partindo
+de $\Pi_1=\{2,3\}$, isso determina todos os primos por indução em $k$.
+\end{corolario}
+
+O Corolário~\ref{cor:recursao} é o crivo de Eratóstenes, lido de baixo para cima:
+em vez de riscar múltiplos em toda a reta, classificamos um bloco com o crivo
+acumulado dos blocos anteriores. A diferença é de organização, não de conteúdo.
+
+\begin{observacao}[a semente é maior que o necessário]\label{obs:sementemaior}
+O Lema~\ref{lema:bloco} na verdade dá $q<2^{(k+1)/2}$, de modo que bastaria tomar
+como semente os primos abaixo de $2^{(k+1)/2}$ — muito menos do que $\Seed_k$.
+Escolhemos $2^k$ porque, com essa escolha, a semente coincide exatamente com a
+união dos blocos anteriores, e a recursão fica sem parâmetros. É uma escolha de
+clareza, não de economia.
+\end{observacao}
+
+\subsection{O produto de um intervalo}
+
+O dicionário da Seção~\ref{sec:dicionario} é sobre frequências individuais. Para
+desenhar um bloco inteiro de uma só vez (Seção~\ref{sec:desenho}) precisamos de um
+objeto que carregue, de uma vez, as frequências de todos os primos abaixo de um
+corte. O produto de um intervalo faz isso.
+
+\begin{definicao}\label{def:Q}
+Para $p$ primo, seja $n=\lfloor\log_2 p\rfloor$, de modo que $p\in A_n$. Definimos
+\[
+  Q(p) \;=\; \prod_{x=2^{\,n-1}}^{p-1} x .
+\]
+\end{definicao}
+
+\begin{lema}[o primorial divide]\label{lema:primorial}
+Para todo primo $p\ge2$ vale
+\[
+  \prod_{\substack{q\ \mathrm{primo}\\ q<p}} q \;\;\Bigm|\;\; Q(p).
+\]
+\end{lema}
+
+\begin{proof}
+Seja $q<p$ primo. Se $q\ge2^{n-1}$, então $q$ é um dos fatores do produto, logo
+divide $Q(p)$. Se $q<2^{n-1}$, o intervalo $[2^{n-1},p-1]$ contém
+$p-2^{n-1}\ge 2^n-2^{n-1}=2^{n-1}>q$ inteiros consecutivos; qualquer bloco de $q$
+inteiros consecutivos contém um múltiplo de $q$, logo algum fator do produto é
+múltiplo de $q$. Como os primos $q<p$ são distintos, o produto deles divide
+$Q(p)$.
+\end{proof}
+
+O Lema~\ref{lema:primorial} diz que $Q(p)$ carrega \emph{todos} os primos abaixo
+de $p$ na sua fatoração: os que estão no intervalo, diretamente; os menores,
+através de múltiplos. É essa dupla presença que a representação espectral da
+Seção~\ref{sec:desenho} vai separar.
+
+\subsection{O algoritmo e seu custo}
+
+O Corolário~\ref{cor:recursao} é executável em poucas linhas:
+
+\begin{center}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\begin{verbatim}
+P <- []                      # semente, bloco a bloco
+para m = 2, 3, ... , p-1:
+    primo <- verdadeiro
+    para b em P:
+        se b*b > m: pare
+        se m mod b = 0: primo <- falso; pare
+    se primo: P <- P + [m]
+devolva P                    # todos os primos < p
+\end{verbatim}
+\end{minipage}
+\end{center}
+
+O teste de parada $b^2>m$ é o Lema~\ref{lema:bloco} aplicado em tempo de execução:
+nenhum divisor acima de $\sqrt m$ precisa ser testado. O custo é o da divisão de
+tentativas, $O(p\sqrt p/\log p)$: a estrutura de blocos não muda a ordem
+assintótica, apenas organiza a base. Registramos isso como um fato, porque ele
+delimita o que a partição binária oferece — uma base canônica e uma indução limpa,
+não um algoritmo novo.
+
+A Tabela~\ref{tab:crivo} registra a verificação direta.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{rrrr}
+\toprule
+$p$ & $n=\lfloor\log_2 p\rfloor$ & primos $<p$ & recuperados \\
+\midrule
+$37$    & 5  & 11   & 11 \\
+$131$   & 7  & 31   & 31 \\
+$503$   & 8  & 95   & 95 \\
+$2\,003$& 10 & 303  & 303 \\
+$8\,009$& 12 & 1\,007 & 1\,007 \\
+$16\,381$& 13 & 1\,899 & 1\,899 \\
+\bottomrule
+\end{tabular}
+\caption{Recuperação exata dos primos por blocos, sem qualquer teste de
+primalidade externo. Em todos os casos a lista coincide com $\pi(p-1)$.}
+\label{tab:crivo}
+\end{table}

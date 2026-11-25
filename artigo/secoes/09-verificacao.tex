@@ -1,0 +1,129 @@
+% ===========================================================================
+\section{Verificação e reprodutibilidade}\label{sec:verificacao}
+% ===========================================================================
+
+Todas as figuras deste artigo são calculadas a partir das definições, por dois
+programas curtos em Python que acompanham o texto. A aritmética da
+Seção~\ref{sec:blocos} e as cotas da Seção~\ref{sec:geometria} foram também
+verificadas de forma mecânica em Lean~4. Esta seção descreve o que foi calculado,
+como, e o que a verificação formal cobre.
+
+\subsection{Os programas}
+
+\begin{sloppypar}
+O material suplementar, disponível em
+\url{https://github.com/tiagobandeira/analise-espectral-primos}, contém:
+\end{sloppypar}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{llr}
+\toprule
+arquivo & o que calcula & tempo \\
+\midrule
+\texttt{figuras\_artigo.py} & as seis figuras (PDF vetorial) & $\approx 8$ min \\
+\texttt{verificar\_teoremas.py} & as tabelas e as verificações V1--V5 & $\approx 2$ min \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+O primeiro programa não depende de nenhuma biblioteca além de \texttt{numpy} e
+\texttt{matplotlib}, e recalcula cada painel a partir da definição do sinal
+\eqref{eq:Sm}: os logaritmos de módulo são somados termo a termo, as transformadas
+são calculadas com \texttt{rfft} e as frequências convertidas por
+$x=\operatorname{round}(e^{2\pi f})$. O segundo verifica por força bruta, para
+blocos até $k=22$, que o menor fator primo de todo composto de $A_k$ está em
+$\Seed_k$ (Lema~\ref{lema:bloco}), que o par de vizinhos inteiros de todo primo do
+bloco é $\Seed_k$-suave (Lema~\ref{lema:qmaisum}) e que o mínimo de $\rB$ é
+atingido em $q_k$ (Corolário~\ref{cor:min}).
+
+\subsection{Os números das tabelas}
+
+As Tabelas~\ref{tab:crivo}, \ref{tab:rho} e \ref{tab:lei} contêm os valores
+medidos. A Tabela~\ref{tab:rho} é inteiramente explicada pelo
+Teorema~\ref{teo:exato}: cada entrada é $g(q_k)$, calculada em precisão dupla, e a
+coluna da cota é a expressão do Teorema~\ref{teo:cota}. A Tabela~\ref{tab:lei}
+contém o par gargalo de cada semente, obtido por busca direta sobre os pares de
+primos consecutivos.
+
+A Tabela~\ref{tab:janela} e a Tabela~\ref{tab:gemeos} são medições, não
+identidades: nelas há erro de leitura, e é justamente esse erro que a
+Proposição~\ref{prop:janela} explica. Registramos nas duas tabelas o valor medido,
+sem suavização.
+
+\subsection{A verificação formal}
+
+O núcleo da Seção~\ref{sec:geometria} e a aritmética da Seção~\ref{sec:blocos}
+foram formalizados em Lean~4 sobre a biblioteca Mathlib \cite{mathlib}, sem
+\texttt{sorry} e sem axiomas além dos da própria biblioteca. O Apêndice~\ref{ap:lean}
+traz os enunciados exatos.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+resultado & declaração em Lean & status \\
+\midrule
+Lema~\ref{lema:bloco} (composto tem fator pequeno) &
+\texttt{existe\_fator\_primo\_na\_semente} & provado \\
+Teorema~\ref{teo:crivo} (crivo por blocos) &
+\texttt{bloco\_primo\_iff} & provado \\
+Teorema~\ref{teo:irred} (irredutibilidade) &
+\texttt{logRedutivel\_iff} & provado \\
+Lema~\ref{lema:vizinho} (vizinho inteiro) &
+\texttt{log\_dist\_ge} & provado \\
+Teorema~\ref{teo:cota} (cota uniforme) &
+\texttt{cota\_rho} & provado \\
+monotonia da cota em $k$ (auxiliar) &
+\texttt{cota\_antitone} & provado \\
+$\log(1+1/q)\ge 1/(q+1)$ &
+\texttt{inv\_succ\_le\_log\_ratio} & provado \\
+igualdade em $q+1$ &
+\texttt{log\_dist\_succ\_eq} & provado \\
+\bottomrule
+\end{tabular}
+\caption{O que a formalização cobre. As declarações residem em
+\texttt{Espectral/Bloco.lean} e \texttt{Espectral/Rho.lean}, e compilam contra
+\texttt{leanprover/lean4:v4.37.0-rc1} com Mathlib.}
+\label{tab:lean}
+\end{table}
+
+O que a formalização \emph{não} cobre, e por quê:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+\item A igualdade do Teorema~\ref{teo:exato} na forma completa exigiria definir
+$\rB$ como mínimo sobre um conjunto de suaves; formalizamos as duas metades que a
+demonstração usa — a cota inferior para todo inteiro (Lema~\ref{lema:vizinho}) e o
+fato de a cota ser atingida em $q+1$ —, que é o conteúdo matemático. O passo
+final, ``logo o mínimo é esse valor'', é imediato no papel.
+\item A suavidade de $q+1$ (Lema~\ref{lema:qmaisum}) é aritmética elementar mas
+exige a maquinaria de fatoração de Mathlib; deixamo-la no papel.
+\item As Proposições~\ref{prop:gemeo} e \ref{prop:janela} são afirmações sobre
+integrais de somas finitas de cossenos. Formalizá-las exigiria a teoria de
+integrais de Riemann para funções oscilatórias, com custo desproporcional ao
+conteúdo, que é uma desigualdade triangular e $|F(\alpha)|\le2/|\alpha|$.
+\end{itemize}
+
+\subsection{Como reproduzir}
+
+\begin{center}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\begin{verbatim}
+# figuras (Python 3.11+, numpy, matplotlib)
+python artigo/experimentos/figuras_artigo.py
+
+# tabelas e verificações por força bruta
+python artigo/experimentos/verificar_teoremas.py
+
+# formalização (Lean 4 + Mathlib)
+cd formalizacao && lake exe cache get && lake build
+\end{verbatim}
+\end{minipage}
+\end{center}
+
+Nenhum dos cálculos usa amostragem aleatória: todos são determinísticos, e os
+valores das tabelas são reprodutíveis bit a bit em precisão dupla. Os arquivos
+\texttt{.json} produzidos pelos programas contêm os valores brutos de cada medida
+citada no texto.

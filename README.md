@@ -83,23 +83,30 @@ O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutur
 
 ---
 
-## Artigo de síntese
+## Artigo: uma representação espectral da aritmética
 
-O percurso completo (Notas 16–40) é reconstruído, auditado e formalizado em
-[`artigo/`](artigo/):
+O artigo em [`artigo/artigo.pdf`](artigo/artigo.pdf) (LaTeX, 30 páginas,
+autocontido) constrói um dicionário entre a aritmética multiplicativa e a reta
+real — produto vira soma, suavidade vira pertencer a um reticulado, primalidade
+vira irredutibilidade — e desenha o crivo em frequência.
 
-- **três resultados demonstrados** — irredutibilidade logarítmica ⟺ primalidade,
-  o lema do bloco binário, e o **valor exato** de `ρ_min(k) = log(1+1/q_max)/log q_max`
-  (que a Nota 27 só observava até `k = 11`), com a cota `ρ ≥ 1/(2^{k+1}(k+1)log 2)`;
-- **a lei de custo do estágio espectral**, `t_max(n) = Θ(2^n/n)`, provada por
-  casa de pombos sobre os gaps da semente — sem depender da conjectura de gêmeos;
-- **dois experimentos que sobrevivem à auditoria** (assinatura de gêmeos e
-  detector de fator comum em lote), com figuras e scripts reprodutíveis;
+- **Teoremas 4.2 e 4.4** — a geometria exata: para todo primo `q` de um bloco,
+  `ρ(q) = log(1+1/q)/log q`, em igualdade, e a margem de classificação é
+  `ρ_min(k) = log(1+1/q_max)/log q_max ~ 1/(q log q)`;
+- **Teorema 6.4** — a janela necessária para desenhar um bloco é
+  `τ(Seed_k) = Θ(2^k/k)`, por casa de pombos sobre os gaps da semente;
+- **Proposição 7.2** — contagem coerente: `k` candidatos com o mesmo núcleo
+  produzem amplitude exatamente `k` vezes a de um só;
+- **Proposição 8.1** — a assinatura de um par: sinal `1` contra fundo `O(q/T)`;
 - **formalização em Lean 4** de oito declarações, sem `sorry`, em
-  [`formalizacao/`](formalizacao/);
-- **uma auditoria explícita** das afirmações do corpus, com três correções
-  (a lei de `t_max` é linear em `p`, a rota de Baker é desnecessária, e os
-  "80,1% de acurácia" medem incompletude da busca, não sobreposição geométrica).
+  [`formalizacao/`](formalizacao/), com os enunciados no Apêndice A.
+
+O artigo não cita as notas da série: os resultados que usa estão demonstrados
+nele. As notas entram como material suplementar e como registro do percurso —
+inclusive [`artigo/auditoria-e-correcoes.md`](artigo/auditoria-e-correcoes.md),
+que confronta as notas 16–40 com os cálculos e registra três correções (a lei de
+`t_max` é linear em `p`; a rota de Baker é desnecessária; os "80,1%" medem
+incompletude da busca, não sobreposição geométrica).
 
 ---
 

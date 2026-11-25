@@ -1,0 +1,121 @@
+% ===========================================================================
+\section{Introdução}
+% ===========================================================================
+
+A multiplicação de inteiros é uma operação com pouca estrutura visível. A adição
+na reta real tem ordem, distância e simetria; o produto em $\N$ tem apenas a
+fatoração. O logaritmo é a ponte entre as duas: ele transforma produto em soma,
+e é a única (a menos de escala) com essa propriedade. Este artigo percorre essa
+ponte até o fim, e o que se encontra do outro lado é uma imagem — literalmente,
+uma imagem em frequência — da aritmética elementar.
+
+A pergunta de partida é simples de enunciar. Todo inteiro $m \ge 2$ tem uma
+frequência natural,
+\[
+  \nfreq{m} \;=\; \log m ,
+\]
+e a fatoração única diz que $m$ é composto exatamente quando $\nfreq{m}$ pode ser
+escrito como soma de frequências de inteiros menores. Ou seja: \emph{a
+primalidade é a irredutibilidade de um ponto num semigrupo aditivo}. Isso, por si
+só, é apenas uma reformulação. A reformulação torna-se interessante quando se
+pergunta pela \emph{distância} — quão longe $\nfreq{m}$ está do semigrupo gerado
+por um conjunto de primos — porque aí a aritmética ganha uma geometria, e a
+geometria pode ser desenhada.
+
+O artigo constrói três coisas.
+
+\paragraph{O dicionário.} Na Seção~\ref{sec:dicionario} formalizamos a tradução
+entre a estrutura multiplicativa de $\N$ e a estrutura aditiva da reta. O ponto
+central é que ela é um isomorfismo de semigrupos sobre os números gerados por um
+conjunto de primos, de modo que perguntas multiplicativas (``$m$ é divisível por
+$p$?'', ``$m$ é primo?'') se tornam perguntas aditivas (``$\nfreq{m}$ está no
+reticulado?'', ``$\nfreq{m}$ é gerador?'').
+
+\paragraph{O crivo como partição.} Na Seção~\ref{sec:blocos} mostramos que a
+partição de $\N$ em blocos binários
+\[
+  A_k \;=\; [\,2^k,\; 2^{k+1}) , \qquad k \ge 0 ,
+\]
+é a partição adaptada ao dicionário. O fato decisivo é elementar: \emph{todo
+composto de $A_k$ tem um fator primo menor que $2^k$} (Lema~\ref{lema:bloco}). A
+consequência é que cada bloco pode ser classificado usando apenas o bloco
+anterior como base — e que essa base, a \emph{semente} $\Seed_k$, é exatamente a
+que o dicionário exige. O crivo de Eratóstenes aparece então como um caso
+particular de uma recorrência sobre blocos, sem nada de espectral.
+
+\paragraph{A geometria exata.} A Seção~\ref{sec:geometria} é o núcleo matemático.
+Definimos a distância relativa $\rB_{\Seed}(m)$ de $\nfreq{m}$ ao reticulado
+gerado pelos logaritmos de $\Seed$, e determinamos seu valor \emph{exato} para os
+primos de um bloco:
+\begin{equation}\label{eq:rhoexato}
+  \rB(q) \;=\; \frac{\log\bigl(1+1/q\bigr)}{\log q}
+  \qquad \text{para todo primo } q \in A_k,\ k\ge 2 .
+\end{equation}
+Não é uma cota: é igualdade. E a razão é uma única observação, quase banal — os
+dois vizinhos inteiros de um primo ímpar são compostos, logo ambos pertencem ao
+reticulado, de modo que o ponto do reticulado mais próximo de $\nfreq{q}$ é sempre
+$\log(q+1)$. O reticulado gerado pelos primos de um bloco é, na escala $1/q$,
+indistinguível do conjunto de \emph{todos} os logaritmos de inteiros. Desse valor
+exato saem a cota inferior uniforme
+$\rB(q) \ge \bigl(2^{k+1}(k+1)\log 2\bigr)^{-1}$ para $q \in A_k$, o mínimo
+$\rB_{\min}(k) = \log(1+1/q_k)/\log q_k$ (atingido no maior primo $q_k$ do bloco)
+e o assintótico $\rB_{\min}(k) \sim 1/(q_k \log q_k)$.
+
+Com isso o dicionário fica completo, e o retrato que ele permite desenhar é o das
+Seções~\ref{sec:desenho} a \ref{sec:assinatura}. Três retratos, na verdade.
+
+\paragraph{Primeiro retrato: o desenho do crivo.} Seção~\ref{sec:desenho}. Para
+cada inteiro $m$ considere a função
+\[
+  S_m(t) \;=\; -\tfrac12 \log\!\Bigl(1 - 2\,m^{-1/2}\cos\bigl(t\nfreq{m}\bigr)
+  + m^{-1}\Bigr) ,
+\]
+que é o logaritmo do módulo do fator $\bigl(1-m^{-s}\bigr)^{-1}$ avaliado em
+$s=\tfrac12+it$. Ela oscila com frequência $\nfreq{m}/(2\pi)$ e amplitude
+$\approx m^{-1/2}$. Somando sobre um bloco e subtraindo a parte devida aos
+compostos, o resíduo é a soma dos $S_q$ sobre os primos do bloco — e a
+transformada de Fourier desse resíduo tem exatamente um pico por primo, em
+posição $\nfreq{q}/(2\pi)$ (Figura~\ref{fig:desenho}). A subtração é uma operação
+aritmética simples e a imagem é fiel; o que a figura mostra é o bloco sem os
+compostos, e nada mais.
+
+\paragraph{Segundo retrato: a lei de resolução.} Seção~\ref{sec:resolucao}. Um
+desenho tem custo. Para separar dois primos consecutivos $q_1<q_2$ na imagem é
+necessário observar o sinal até $t_{\max} > 2\pi/\log(q_2/q_1)$ (critério de
+Rayleigh). O par que impõe o maior requisito é o de menor \emph{gap relativo} —
+em geral um par de gêmeos — e daí resulta que o custo do desenho de um bloco é
+$\Theta(2^n/n)$, com cotas explícitas (Teorema~\ref{teo:custo}). No nível de um
+primo isolado, o requisito é $\Theta(q)$: ver a irredutibilidade de $q$ custa uma
+janela de tamanho proporcional a $q$. Essa é uma propriedade da representação, e
+responde a uma pergunta natural de quem olha as figuras: quanto é preciso
+``aumentar o zoom''.
+
+\paragraph{Terceiro retrato: a contagem.} Seção~\ref{sec:contagem}. Há um caso em
+que a representação espectral faz algo que a aritmética faz de outro modo, e o faz
+com exatidão absoluta. Remova de cada inteiro de um lote o seu núcleo, isto é, a
+parte formada por um conjunto fixo $P$ de primos pequenos. Se $k$ candidatos do
+lote têm o mesmo núcleo $r$, então os $k$ termos resultantes são literalmente a
+\emph{mesma} função de $t$, e somam $k$ vezes. A amplitude em $\nfreq r$ é
+exatamente $k$ vezes a de um único termo, para qualquer janela e qualquer
+resolução (Proposição~\ref{prop:ganho}). O espectro passa a ser um contador:
+a altura de um pico é o número de candidatos que compartilham aquele núcleo.
+
+\paragraph{E um quarto, menor.} Seção~\ref{sec:assinatura}. Para um par
+$(p,p+2)$, a presença do tom em $\nfreq{p+2}$ é detectável com contraste que cresce
+como $T/p$; pares gêmeos e pares mistos se separam, e o fundo decai como
+$1/T$. É a versão local do segundo retrato.
+
+\medskip
+
+\paragraph{Escopo.} O objetivo do artigo é a \emph{representação}, não a
+eficiência: medimos o custo de ver, e não propomos substituir a aritmética por
+transformadas. A aritmética decide a primalidade de $m$ em $O(\sqrt m)$ operações;
+a imagem espectral exige uma janela de tamanho $\Theta(m)$. O valor do dicionário
+está em outro lugar: ele torna visíveis relações que a notação multiplicativa
+esconde, e dá a cada uma delas uma lei quantitativa. As figuras deste artigo foram
+feitas para serem olhadas.
+
+\paragraph{Convenções.} $\N=\{1,2,3,\dots\}$; $p$ e $q$ sempre denotam primos;
+$\log$ é o logaritmo natural; $v_p(m)$ é o expoente de $p$ em $m$. Escrevemos
+$[a,b)=\{m\in\N: a\le m<b\}$ e $\#X$ para a cardinalidade de um conjunto finito
+$X$. O Teorema Fundamental da Aritmética é usado livremente, e apenas ele.

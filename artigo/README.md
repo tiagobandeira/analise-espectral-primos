@@ -1,58 +1,61 @@
-# Artigo — Irredutibilidade logarítmica: anatomia de um crivo espectral
+# Uma representação espectral da aritmética
 
-Este diretório contém o artigo, as figuras e os experimentos que o sustentam.
+Artigo autocontido em LaTeX: primos, compostos e crivos em frequência.
 
 ```
 artigo/
-  artigo.md                      texto completo (Markdown + LaTeX)
-  figuras/*.png                  figuras 1–5, geradas pelos scripts
+  artigo.tex                    fonte (preamble + \input das seções)
+  artigo.pdf                    compilado, 30 páginas
+  secoes/                       01-intro … 10-perspectiva, apA-lean, apB-numeros
+  figuras/                      f1…f6 em PDF vetorial (usadas pelo .tex)
+                                e1…e5 em PNG (versão anterior)
   experimentos/
-    verificar_teoremas.py        V1–V5: auditoria dos teoremas por força bruta
-    experimentos_espectrais.py   E1–E5: experimentos e figuras
-    resultados.json              valores brutos de E1–E5
-    verificacao_teoremas.json    valores brutos de V1–V5
+    figuras_artigo.py           gera as seis figuras PDF a partir das definições
+    verificar_teoremas.py       verificações por força bruta e tabelas
+    resultados.json             valores brutos
+    verificacao_teoremas.{json,md}
+  auditoria-e-correcoes.md      documento anterior: a auditoria das notas
 ```
 
-## O que o artigo argumenta
-
-O programa espectral do repositório (Notas 16–40) produziu um crivo correto, mas
-por um caminho que ele mesmo desmonta: cada camada espectral (ζ, FFT, t_max,
-isprime) foi substituída por aritmética até restarem dois laços de divisibilidade.
-O artigo reconstrói esse percurso e separa o que sobreviveu do que era narrativa.
-
-Resultados demonstrados (não apenas observados):
-
-| # | Resultado | Onde |
-|---|---|---|
-| Teorema 3 | irredutibilidade logarítmica ⟺ primalidade | §2.1 |
-| Lema 4 | composto em `A_k` tem fator primo `< 2^k` | §3.1 |
-| Teorema 7 | `ρ(q) ≥ 1/(2^{k+1}(k+1)log 2)` sobre o bloco | §4.2 |
-| Teorema 9 | `ρ(q) = log(1+1/q)/log q` **exato**, para todo primo do bloco | §4.3 |
-| Corolário 10 | `ρ_min(k) = log(1+1/q_max)/log q_max` | §4.3 |
-| Teorema 12 | `t_max(n) = Θ(2^n/n)`, sem depender da conjectura de gêmeos | §5.3 |
-| Proposição 13 | lei do ganho orbital é identidade exata | §6.1 |
-| Proposição 14 | assinatura de gêmeos decai como `p/T` | §6.2 |
-| Proposição 15 | janela de leitura: `2W+1 < T/(π q)` | §6.2 |
-
-Correções ao corpus (Seção 9): a lei de `T_max` é linear em `p` e não
-superlinear; a rota de Baker é desnecessária (a cota correta é elementar); os
-"80,1% de acurácia" do detector contínuo medem incompletude da busca, não
-sobreposição geométrica; o "Teorema de Invariância" da Nota 21 é a definição do
-operador, e seu conteúdo real é a ortogonalidade (Lema 11).
-
-## Como reproduzir
+Compilar:
 
 ```bash
-pip install numpy scipy matplotlib sympy   # mpmath não é necessário
-python experimentos/verificar_teoremas.py       # ~2 min
-python experimentos/experimentos_espectrais.py  # ~6 min, gera figuras/
+cd artigo
+pdflatex --enable-installer artigo.tex   # duas vezes, para as referências
 ```
 
-Cada script aceita seleção de etapas, por exemplo `experimentos_espectrais.py e3 e5`.
+(`--enable-installer` só é necessário na primeira vez, para o MiKTeX baixar os
+pacotes ausentes.)
 
-Nenhum experimento usa amostragem aleatória; todos são determinísticos.
+## O que o artigo contém
 
-## Formalização
+Um dicionário entre a aritmética multiplicativa e a reta real — produto vira
+soma, suavidade vira pertencer a um reticulado, primalidade vira
+irredutibilidade — e, sobre ele, três imagens do crivo.
 
-O núcleo aritmético/analítico está em `../formalizacao/` (Lean 4 + Mathlib).
-Veja a Seção 8 do artigo e o `README.md` daquele diretório.
+| § | conteúdo | resultado central |
+|---|---|---|
+| 2 | o dicionário | Teorema 2.7: irredutível ⟺ primo |
+| 3 | blocos binários | Lema 3.2 e Teorema 3.3 (crivo por blocos) |
+| 4 | geometria do reticulado | **Teoremas 4.2 e 4.4**: `ρ(q) = log(1+1/q)/log q`, exato |
+| 5 | o desenho | Figuras 1 e 2: os primos do bloco como picos isolados |
+| 6 | resolução | **Teorema 6.4**: `τ(Seed_k) = Θ(2^k/k)`; Corolário 6.5 |
+| 7 | contagem coerente | **Proposição 7.2**: a razão medida é exatamente `k` |
+| 8 | assinatura de um par | Proposição 8.1: sinal `1`, fundo `O(q/T)` |
+| 9 | verificação | tabela do que o Lean cobre |
+| 10 | perspectiva | o dicionário em resumo, perguntas abertas |
+
+Apêndice A: os enunciados verificados em Lean 4, em notação matemática.
+Apêndice B: os dados numéricos completos.
+
+## Relação com o resto do repositório
+
+O artigo é autocontido: não cita as notas da série, e todos os resultados que usa
+estão demonstrados nele. O repositório entra como material suplementar — código,
+figuras, formalização — e como registro do percurso.
+
+`auditoria-e-correcoes.md` é o documento anterior, de natureza diferente: ele
+confronta as notas 16–40 com os cálculos e registra três correções (a lei de
+`T_max` é linear em `p`; a rota de Baker é desnecessária; os "80,1%" medem
+incompletude da busca). Fica aqui porque é útil a quem for mexer nas notas, mas
+não faz parte do artigo.

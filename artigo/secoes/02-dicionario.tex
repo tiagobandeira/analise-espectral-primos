@@ -1,0 +1,166 @@
+% ===========================================================================
+\section{O dicionário: de produto a soma}\label{sec:dicionario}
+% ===========================================================================
+
+\subsection{Frequências}
+
+\begin{definicao}[frequência de um inteiro]\label{def:freq}
+Para $m\in\N$ com $m\ge 2$, a \emph{frequência} de $m$ é
+\[
+  \nfreq{m} \;=\; \log m \quad\text{(em radianos por unidade de $t$),}
+  \qquad
+  \freq{m} \;=\; \frac{\nfreq{m}}{2\pi} \quad\text{(em ciclos).}
+\]
+\end{definicao}
+
+A escolha de $\log$ como normalização não é estética: é forçada pela
+multiplicação.
+
+\begin{lema}\label{lema:homomorfismo}
+A aplicação $\nfreq{}\colon \N\to[0,\infty)$ é injetora e satisfaz
+\[
+  \nfreq{mn} \;=\; \nfreq{m} + \nfreq{n} \qquad (m,n\in\N).
+\]
+Além disso, se $\prod_{i} p_i^{e_i} = \prod_{j} q_j^{f_j}$ com $p_i,q_j$ primos e
+$e_i,f_j\in\N$, então os dois lados coincidem como produtos formais.
+\end{lema}
+
+\begin{proof}
+A injetividade de $\log$ em $(0,\infty)$ dá a primeira parte; a segunda é
+$\log(mn)=\log m+\log n$. A afirmação final é o Teorema Fundamental da
+Aritmética, lido do lado logarítmico: duas decomposições com o mesmo logaritmo
+têm o mesmo valor, logo a mesma fatoração.
+\end{proof}
+
+O Lema~\ref{lema:homomorfismo} diz que $\nfreq{}$ é um isomorfismo entre o
+semigrupo multiplicativo $\N$ e sua imagem aditiva. Não é um isomorfismo
+\emph{sobre} $\R$: a imagem é um conjunto localmente finito (Lema~\ref{lema:local})
+e portanto cheio de buracos. O interesse está justamente na estrutura desses
+buracos, e é o que os reticulados da próxima subseção medem.
+
+\subsection{Reticulados e números suaves}
+
+\begin{definicao}\label{def:reticulado}
+Seja $B$ um conjunto finito de primos. O \emph{reticulado} gerado por $B$ é
+\[
+  \Lat(B) \;=\; \Bigl\{\textstyle\sum_{p\in B} e_p \nfreq{p}
+   \;:\; e_p\in\Z_{\ge 0}\Bigr\} \;\subset\; [0,\infty).
+\]
+Um inteiro $m\ge1$ é \emph{$B$-suave} se todos os seus fatores primos pertencem a
+$B$.
+\end{definicao}
+
+A palavra ``reticulado'' é usada no sentido de semigrupo aditivo gerado: os
+geradores são os $\nfreq p$, com coeficientes inteiros não negativos. É a noção de
+\emph{coin problem} aditivo, transportada para a reta por logaritmos.
+
+\begin{lema}\label{lema:suaves}
+A aplicação $\nfreq{}$ estabelece uma bijeção entre o conjunto dos inteiros
+$B$-suaves e $\Lat(B)$. Em particular,
+\[
+  \rB_B(m)=0 \iff m \text{ é } B\text{-suave},
+\]
+onde $\rB_B$ é definida na Definição~\ref{def:rho}.
+\end{lema}
+
+\begin{proof}
+Se $m=\prod_{p\in B}p^{e_p}$ então $\nfreq m=\sum e_p\nfreq p\in\Lat(B)$.
+Reciprocamente, se $\nfreq m=\sum e_p\nfreq p$, então
+$m=\prod p^{e_p}$ pelo Lema~\ref{lema:homomorfismo}, logo $m$ é $B$-suave. A
+injetividade de $\nfreq{}$ dá a unicidade.
+\end{proof}
+
+\begin{lema}\label{lema:local}
+Para todo $X\ge 1$, o conjunto dos inteiros $B$-suaves $\le X$ é finito. Em
+particular $\Lat(B)$ não tem pontos de acumulação em $\R$: para todo $\nu\ge0$
+existem somente finitos elementos de $\Lat(B)$ em $[0,\nu]$.
+\end{lema}
+
+\begin{proof}
+Se $m=\prod_{p\in B}p^{e_p}\le X$ então $e_p\le \log X/\log p$ para cada $p$, de
+modo que há no máximo $\prod_{p\in B}\bigl(1+\lfloor\log X/\log p\rfloor\bigr)$
+tais inteiros. Como $\Lat(B)$ é a imagem desse conjunto por $\nfreq{}$ e
+$\nfreq{}$ é injetora, o mesmo vale para $\Lat(B)$.
+\end{proof}
+
+O Lema~\ref{lema:local} é o que autoriza falar em \emph{distância mínima} em vez
+de ínfimo: o reticulado é localmente finito, então o mínimo é sempre atingido.
+
+\subsection{Irredutibilidade}
+
+\begin{definicao}\label{def:irredutivel}
+Seja $m\ge2$ e $B$ um conjunto de primos. Dizemos que $m$ é \emph{$B$-redutível}
+se
+\[
+  \nfreq m \;=\; \sum_{p\in B} e_p \,\nfreq p
+  \qquad\text{com } e_p\in\Z_{\ge0}\ \text{e}\ \textstyle\sum_p e_p \ge 2 ,
+\]
+isto é, se $m$ se escreve como produto de pelo menos dois fatores de $B$.
+Caso contrário, $m$ é \emph{$B$-irredutível}.
+\end{definicao}
+
+A condição $\sum e_p\ge2$ exclui a representação trivial $m=p$ com $p\in B$.
+Note que a definição é puramente aditiva na reta: ela não menciona produtos, e é
+essa a razão de ela poder ser medida por distâncias.
+
+\begin{teorema}[irredutibilidade é primalidade]\label{teo:irred}
+Seja $m\ge2$ e seja $B(m)=\{p \text{ primo} : p<m\}$. Então $m$ é
+$B(m)$-irredutível se, e somente se, $m$ é primo.
+\end{teorema}
+
+\begin{proof}
+Se $m$ é composto, a fatoração $m=\prod p_i^{e_i}$ tem todos os $p_i<m$, e
+$\sum e_i\ge2$; tomando $\nfreq{}$ obtém-se uma representação, logo $m$ é
+redutível. Reciprocamente, se $\nfreq m=\sum e_p\nfreq p$ com $p<m$ e
+$\sum e_p\ge2$, então $m=\prod p^{e_p}$ é um produto de pelo menos dois inteiros
+maiores que $1$, logo composto.
+\end{proof}
+
+O Teorema~\ref{teo:irred} é uma reformulação, e vale dizê-lo com clareza: ele não
+demonstra nada sobre primos que a fatoração única já não contenha. Sua função é
+mudar de coordenadas. Na reta, ``$m$ é composto'' passa a significar ``o ponto
+$\nfreq m$ é uma soma de geradores'', e ``$m$ é primo'' significa ``o ponto
+$\nfreq m$ não é''. A partir daqui, perguntas de \emph{aproximação} fazem sentido.
+
+\subsection{A versão métrica}
+
+\begin{definicao}\label{def:rho}
+Seja $m\ge2$ e $B$ um conjunto finito de primos. A \emph{distância relativa} de
+$\nfreq m$ a $\Lat(B)$ é
+\[
+  \rB_B(m) \;=\;
+  \frac{\min\bigl\{\,|\nfreq m - x| : x\in\Lat(B),\ x\neq \nfreq m\,\bigr\}}{\nfreq m}
+  \;\in\;[0,1] .
+\]
+Quando não há ambiguidade escrevemos apenas $\rB(m)$.
+\end{definicao}
+
+O mínimo é atingido pelo Lema~\ref{lema:local}, e a normalização por $\nfreq m$
+torna $\rB$ invariante por escala: ela mede o desvio \emph{relativo}, que é a
+quantidade que sobrevive quando se comparam blocos de tamanhos diferentes.
+
+\begin{corolario}\label{cor:zero}
+Para $m\ge2$ e $B$ finito, tem-se $\rB_B(m)=0$ se, e somente se, $m$ é
+$B$-suave. Em particular, tomando $B=B(m)$: $\rB(m)=0$ se, e somente se, $m$ é
+composto.
+\end{corolario}
+
+\begin{proof}
+Imediato do Lema~\ref{lema:suaves} e do Teorema~\ref{teo:irred}.
+\end{proof}
+
+A função $\rB$ é, portanto, um indicador \emph{exato} de suavidade: não é um
+preditor, é um teste. A questão que ocupa as próximas seções é quanto vale
+$\rB$ nos casos em que ele não é zero — isto é, quão longe do reticulado ficam os
+inteiros que não são gerados por ele. A resposta, para os primos de um bloco
+binário, é surpreendentemente limpa (Seção~\ref{sec:geometria}).
+
+\begin{observacao}[o reticulado é finito, não denso]\label{obs:denso}
+Seria tentador pensar que $\Lat(B)$ é denso em $[0,\infty)$, já que os $\nfreq p$
+são linearmente independentes sobre $\Q$ e o semigrupo que eles geram ``deveria''
+preencher a reta. Não é o caso: pelo Lema~\ref{lema:local} o reticulado é
+localmente finito, e um conjunto localmente finito não tem pontos de acumulação.
+O que acontece é mais interessante: os \emph{gaps} entre elementos consecutivos de
+$\Lat(B)$ crescem, mas crescem devagar, e é essa taxa que controla $\rB$ nos
+primos.
+\end{observacao}

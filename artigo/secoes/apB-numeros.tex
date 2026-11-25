@@ -1,0 +1,70 @@
+% ===========================================================================
+\section{Dados numéricos}\label{ap:dados}
+% ===========================================================================
+
+As duas tabelas abaixo contêm os valores completos usados nas
+Figuras~\ref{fig:reticulado} e \ref{fig:lei}. Ambos são calculados diretamente
+pelas fórmulas dos Teoremas~\ref{teo:exato} e \ref{teo:custo}: a primeira coluna de
+cada uma é uma contagem de primos, as demais são avaliações de funções
+elementares.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{rrrrr}
+\toprule
+$k$ & $q_k=\max\Pi_k$ & $\rB_{\min}(k)=g(q_k)$ & cota & razão \\
+\midrule
+$2$  & $7$        & $6{,}862\times10^{-2}$ & $6{,}011\times10^{-2}$ & 1,142 \\
+$3$  & $13$       & $2{,}889\times10^{-2}$ & $2{,}254\times10^{-2}$ & 1,282 \\
+$4$  & $31$       & $9{,}245\times10^{-3}$ & $9{,}017\times10^{-3}$ & 1,025 \\
+$5$  & $61$       & $3{,}956\times10^{-3}$ & $3{,}757\times10^{-3}$ & 1,053 \\
+$6$  & $127$      & $1{,}619\times10^{-3}$ & $1{,}610\times10^{-3}$ & 1,006 \\
+$7$  & $251$      & $7{,}196\times10^{-4}$ & $7{,}044\times10^{-4}$ & 1,022 \\
+$8$  & $509$      & $3{,}149\times10^{-4}$ & $3{,}131\times10^{-4}$ & 1,006 \\
+$9$  & $1\,021$   & $1{,}413\times10^{-4}$ & $1{,}409\times10^{-4}$ & 1,003 \\
+$10$ & $2\,039$   & $6{,}434\times10^{-5}$ & $6{,}404\times10^{-5}$ & 1,005 \\
+$11$ & $4\,093$   & $2{,}937\times10^{-5}$ & $2{,}935\times10^{-5}$ & 1,001 \\
+$12$ & $8\,191$   & $1{,}355\times10^{-5}$ & $1{,}355\times10^{-5}$ & 1,000 \\
+$13$ & $16\,381$  & $6{,}291\times10^{-6}$ & $6{,}290\times10^{-6}$ & 1,000 \\
+$14$ & $32\,749$  & $2{,}937\times10^{-6}$ & $2{,}935\times10^{-6}$ & 1,001 \\
+$15$ & $65\,521$  & $1{,}376\times10^{-6}$ & $1{,}376\times10^{-6}$ & 1,000 \\
+$16$ & $131\,071$ & $6{,}475\times10^{-7}$ & $6{,}475\times10^{-7}$ & 1,000 \\
+$17$ & $262\,139$ & $3{,}058\times10^{-7}$ & $3{,}058\times10^{-7}$ & 1,000 \\
+$18$ & $524\,287$ & $1{,}448\times10^{-7}$ & $1{,}448\times10^{-7}$ & 1,000 \\
+\bottomrule
+\end{tabular}
+\caption{$\rB_{\min}(k)$, a cota do Teorema~\ref{teo:cota} e a razão entre as
+duas. Note que em $k=16$ o valor cruza $10^{-6}$.}
+\label{tab:dadosrho}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{rrrrr}
+\toprule
+$n$ & par gargalo de $\Seed_n$ & $\tau(\Seed_n)$ & $\pi\,q_{\text{gêmeo}}$ & razão \\
+\midrule
+$4$  & $(5,7)$               & $18{,}7$      & $22{,}0$      & 0,851 \\
+$5$  & $(11,13)$             & $37{,}6$      & $40{,}8$      & 0,920 \\
+$6$  & $(29,31)$             & $94{,}2$      & $97{,}4$      & 0,967 \\
+$7$  & $(59,61)$             & $188{,}5$     & $191{,}6$     & 0,984 \\
+$8$  & $(107,109)$           & $339{,}3$     & $342{,}4$     & 0,991 \\
+$9$  & $(239,241)$           & $754{,}0$     & $757{,}1$     & 0,996 \\
+$10$ & $(461,463)$           & $1\,451{,}4$  & $1\,454{,}6$  & 0,998 \\
+$11$ & $(1\,019,1\,021)$     & $3\,204{,}4$  & $3\,207{,}6$  & 0,999 \\
+$12$ & $(2\,027,2\,029)$     & $6\,371{,}1$  & $6\,374{,}3$  & 1,000 \\
+$13$ & $(4\,091,4\,093)$     & $12\,855{,}4$ & $12\,858{,}5$ & 1,000 \\
+$14$ & $(8\,087,8\,089)$     & $25\,409{,}2$ & $25\,412{,}3$ & 1,000 \\
+\bottomrule
+\end{tabular}
+\caption{A janela exigida por $\Seed_n$ e sua relação com $\pi q_{\text{gêmeo}}$,
+onde $q_{\text{gêmeo}}$ é o maior elemento de um par de gêmeos da semente.}
+\label{tab:dadoslei}
+\end{table}
+
+As duas tabelas foram verificadas por programa independente, que recalcula cada
+entrada a partir das definições (Seção~\ref{sec:verificacao}). Os valores de
+$\tau$ são obtidos por busca direta sobre os pares de primos consecutivos de cada
+semente, sem usar a forma assintótica.
