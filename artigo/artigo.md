@@ -568,6 +568,16 @@ valor da razão é a contagem. A Figura 4 mostra o comportamento: crescimento
 exatamente linear em $k$ (razão/$k$ com cinco casas decimais zeradas) e um fundo
 em torno de $1{,}00$ para cofatores que só um candidato possui.
 
+O caso $k = 1$ — um único grupo ativo, medido sem erro — é o que a Nota 38 chama
+de *Lei da Interferência Nula* e o que a Nota 40 deriva analiticamente como
+corolário da sua fórmula de erro de Stage 1 (a soma sobre os grupos interferentes
+é vazia, logo a razão é exatamente $k_q$). A Proposição 13 é a mesma afirmação
+vista por outro ângulo: como os $k$ termos de um grupo são o *mesmo* cosseno, não
+há interferência a somar. Convém separar as duas coisas, porque o corpus as
+confunde: a exatidão de um grupo único é uma identidade; a exatidão de um
+multi-grupo é falsa — a Nota 40 mostra que o erro é a projeção das interferências
+sobre a direção do grupo alvo, de ordem $10^{-3}$ nos casos medidos.
+
 Duas ressalvas que o corpus nem sempre faz. Primeiro, a construção do sinal
 **usa aritmética**: é preciso calcular $v_p(m)$ para saber quanto subtrair de
 $\log m$. O método não é "sem aritmética"; é um método em que a *medição* é
