@@ -1,0 +1,15 @@
+# artefatos locais de build (não versionar)
+_build/
+formalizacao/.lake/
+*.olean
+*.ilean
+*.c
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# sistema
+Thumbs.db
+desktop.ini

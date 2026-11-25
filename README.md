@@ -83,6 +83,26 @@ O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutur
 
 ---
 
+## Artigo de síntese
+
+O percurso completo (Notas 16–40) é reconstruído, auditado e formalizado em
+[`artigo/`](artigo/):
+
+- **três resultados demonstrados** — irredutibilidade logarítmica ⟺ primalidade,
+  o lema do bloco binário, e o **valor exato** de `ρ_min(k) = log(1+1/q_max)/log q_max`
+  (que a Nota 27 só observava até `k = 11`), com a cota `ρ ≥ 1/(2^{k+1}(k+1)log 2)`;
+- **a lei de custo do estágio espectral**, `t_max(n) = Θ(2^n/n)`, provada por
+  casa de pombos sobre os gaps da semente — sem depender da conjectura de gêmeos;
+- **dois experimentos que sobrevivem à auditoria** (assinatura de gêmeos e
+  detector de fator comum em lote), com figuras e scripts reprodutíveis;
+- **formalização em Lean 4** de oito declarações, sem `sorry`, em
+  [`formalizacao/`](formalizacao/);
+- **uma auditoria explícita** das afirmações do corpus, com três correções
+  (a lei de `t_max` é linear em `p`, a rota de Baker é desnecessária, e os
+  "80,1% de acurácia" medem incompletude da busca, não sobreposição geométrica).
+
+---
+
 ## Citação
 
 ```bibtex
