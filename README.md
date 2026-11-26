@@ -1,114 +1,124 @@
-# Análise Espectral de Primos via Produtos de Intervalos Binários
+﻿# Análise Espectral de Primos via Produtos de Intervalos Binários
 
 **T. Bandeira · 2026**
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.20674285)
 
----
-
-## Resultado central
-
-A partir da análise espectral do produto $Q(p) = \prod_{x=2^{n-1}}^{p-1} x$ (bloco binário), descobriu-se uma caracterização puramente aritmética de primalidade: **um inteiro $m$ é primo se e somente se seu logaritmo $\log m$ não pode ser escrito como combinação linear inteira dos logaritmos de primos menores**. Este critério, denominado *irredutibilidade logarítmica*, é geometricamente exato e independe de qualquer oráculo externo.
-
-O método resultante é um crivo autônomo de dois estágios:
-
-1. **Recursão sobre blocos binários** – constrói todos os primos menores que $2^{n-1}$ usando apenas divisibilidade e os primos já encontrados (indutivamente).
-2. **Classificação do bloco $[2^{n-1}, p-1]$** – cada candidato é testado por divisibilidade pelos primos obtidos na etapa 1. A correção é garantida pelo Teorema 1 da Nota MDC: todo composto no bloco tem seu menor fator primo em $\mathcal{P_<}$ (conjunto dos primos $< 2^{n-1}$).
-
-Nenhuma dependência externa é necessária: sem $\zeta(s)$, sem `isprime()`, sem lista prévia de primos.
-
----
-> **Descoberta recente (Nota 33):** Com resolução espectral suficiente (`T_max = 6500` para primos até 299), a amplitude normalizada em `f_{p+2}` separa completamente pares gêmeos de pares mistos (acurácia 100%, 62/62, Mann‑Whitney p < 10⁻¹⁰). Para `T_max` fixo (1500), a acurácia cai para 51,6% – indistinguível do acaso. O resultado confirma que a irredutibilidade logarítmica de primos se manifesta localmente no espectro e que a resolução espectral é o gargalo determinante.
-
-## Evolução teórica
-
-A análise de $\log|Z_Q(\frac12+it)|$ mostrou que picos da FFT nas frequências $\frac{\log q}{2\pi}$ correspondem a primos $q$. O conceito de *irredutibilidade logarítmica* formalizou a separação primo/composto (Nota 21). Com a introdução do critério contínuo $\rho(m)$ (distância de $\log m$ ao reticulado gerado por primos menores), atingiu-se 80% de acurácia sem aritmética inteira (Nota 19). A versão adaptativa $\rho_{\text{adapt}}$ provou a equivalência completa com o teste de divisibilidade, mostrando que a aritmética inteira é o algoritmo ótimo para implementar o critério (Nota 26). Por fim, determinou-se a cota assintótica $\rho_{\min}(k) \sim 1/(2^{k+1}(k+1)\log 2)$, que permite ajustar o limiar de classificação para qualquer escala (Nota 27).
+Repositório de uma investigação sobre a representação espectral da aritmética
+elementar: o que acontece quando se olha para os primos como frequências. Contém
+o artigo final, o código que produziu cada figura, as notas de percurso e uma
+formalização em Lean 4 dos resultados aritméticos. Todo o conteúdo está também
+arquivado no Zenodo, sob o DOI acima.
 
 ---
 
-## Algoritmo final
+## O que tem aqui
 
-```python
-def extrair_primos(p):
-    n = floor(log2(p))
-    # Etapa A: constrói primos < 2^(n-1)
-    P_less = []
-    for m in range(2, 2**(n-1)):
-        primo = True
-        for b in P_less:
-            if b*b > m: break
-            if m % b == 0: primo = False; break
-        if primo: P_less.append(m)
-    # Etapa B: classifica bloco [2^(n-1), p-1]
-    primos_bloco = []
-    for m in range(2**(n-1), p):
-        primo = True
-        for b in P_less:
-            if b*b > m: break
-            if m % b == 0: primo = False; break
-        if primo: primos_bloco.append(m)
-    return P_less + primos_bloco
+| pasta | conteúdo |
+|---|---|
+| [`artigo/`](artigo/) | **o artigo**: [`artigo.pdf`](artigo/artigo.pdf) (30 pp), fonte LaTeX, figuras vetoriais e os scripts que as geram |
+| [`formalizacao/`](formalizacao/) | demonstrações em Lean 4 (Mathlib), sem `sorry` — ver o [`README`](formalizacao/README.md) para compilar |
+| [`codigo/`](codigo/) | o extrator espectral original: pipeline de dois estágios sobre `Q(p)` |
+| [`notas/`](notas/) | 27 arquivos: as notas 16–40 e a metodologia |
+| [`notebooks/`](notebooks/) | 31 notebooks com os experimentos, incluindo os que não deram certo |
+
+## O artigo
+
+**Uma representação espectral da aritmética: primos, compostos e crivos em
+frequência** — [`artigo/artigo.pdf`](artigo/artigo.pdf).
+
+Autocontido: não cita as notas, e todos os resultados que usa estão demonstrados
+nele. Constrói um dicionário entre a aritmética multiplicativa e a reta real —
+produto vira soma, suavidade vira pertencer a um reticulado, primalidade vira
+irredutibilidade — e desenha o crivo em frequência.
+
+A tese, em uma frase: a irredutibilidade de um inteiro é fielmente representável
+no espectro, e o custo de ler essa representação é explícito e mensurável.
+
+### Principais resultados
+
+- **Teorema 2.7** — um inteiro pode ser escrito como combinação inteira de
+  logaritmos de primos menores se, e somente se, é composto.
+- **Lema 3.2 e Teorema 3.3** — todo composto do bloco `A_k = [2^k, 2^{k+1})` tem
+  um fator primo abaixo de `2^k`. Logo o bloco anterior é a base canônica para
+  classificar o seguinte, e o crivo se torna uma recursão.
+- **Teoremas 4.2 e 4.4** — a geometria exata do reticulado: para todo primo `q`
+  de um bloco, a distância relativa de `log q` ao reticulado gerado pelos primos
+  menores vale **exatamente** `log(1+1/q)/log q`. A margem de classificação é
+  `ρ_min(k) = log(1+1/q_max)/log q_max ~ 1/(q log q)`, atingida no maior primo do
+  bloco.
+- **Teorema 6.4** — a janela de observação necessária para desenhar um bloco é
+  `τ(Seed_k) = Θ(2^k/k)`, por casa de pombos sobre os gaps da semente (sem
+  depender da conjectura de primos gêmeos). No nível local, `Θ(q)`.
+- **Proposição 6.6** — critério da janela de leitura: `2W+1 < T/(πq)`.
+- **Proposição 7.2** — contagem coerente: `k` candidatos com o mesmo núcleo
+  somam exatamente `k` vezes o mesmo cosseno, de modo que a altura de um pico é
+  uma contagem inteira.
+- **Proposição 8.1** — a assinatura de um par: sinal `1` contra fundo `O(q/T)`.
+
+O Apêndice A do artigo traz os enunciados das oito declarações verificadas em
+Lean 4; o Apêndice B, os dados numéricos completos.
+
+## Como reproduzir
+
+```bash
+pip install numpy matplotlib
+
+python artigo/experimentos/figuras_artigo.py       # as 6 figuras (PDF), ~8 min
+python artigo/experimentos/verificar_teoremas.py   # tabelas e verificações, ~2 min
+
+cd artigo && pdflatex --enable-installer artigo.tex  # duas vezes
+cd formalizacao && lake exe cache get && lake build  # Lean 4 + Mathlib
 ```
 
-Complexidade: $O(p\sqrt{p}/\log p)$ – mesma ordem da divisão de tentativas, mas com constante melhor devido à estrutura de blocos (ganho de 2× a 6× na prática).
+Nenhum cálculo usa amostragem aleatória; os valores das tabelas são reprodutíveis
+em precisão dupla.
 
----
+## O percurso
 
-## Validação
+As notas (16–40) registram a investigação como ela aconteceu, incluindo as
+tentativas que não funcionaram: o pipeline espectral com ζ, o detector contínuo
+`ρ`, a hipótese de detectar fatores por ressonância. O algoritmo aritmético que
+sobrou é a divisão de tentativas organizada por blocos — mesma ordem
+assintótica, `O(p√p/log p)`, com a base montada por indução; medições da Nota 29
+indicam constante menor que a da divisão ingênua.
 
-Testado para $p$ até 1009 com 100% de acurácia (0 falsos positivos, 0 falsos negativos), em contraste com as versões espectrais anteriores que perdiam primos por resolução finita de $t_{\max}$.
+[`artigo/auditoria-e-correcoes.md`](artigo/auditoria-e-correcoes.md) confronta as
+notas com os cálculos e registra três correções: a lei de `T_max` é **linear** em
+`p` e não superlinear; a rota via formas lineares de Baker é desnecessária (a
+cota correta é elementar); e os "80,1% de acurácia" do detector contínuo medem
+incompletude da busca, não sobreposição geométrica.
 
-| $p$   | Primos reais | Detectados | Taxa  |
-|-------|--------------|------------|-------|
-| 67    | 18           | 18         | 100%  |
-| 131   | 31           | 31         | 100%  |
-| 257   | 54           | 54         | 100%  |
-| 503   | 95           | 95         | 100%  |
-| 1009  | 168          | 168        | 100%  |
+## Validação do algoritmo
 
----
+A extração por blocos devolve exatamente os primos abaixo de `p`, sem oráculo
+externo, para toda a faixa testada:
 
-## Papel da teoria espectral
-
-O percurso espectral não foi um desvio, mas a ferramenta que revelou a estrutura de blocos binários, o critério de irredutibilidade logarítmica e a justificativa formal para os parâmetros do algoritmo. Sem ele, não haveria motivo para adotar a partição em blocos $A_k = [2^k, 2^{k+1}-1]$ nem prova de que $\mathcal{P_<}$ é a base exata para classificar o bloco. A FFT e $t_{\max}$ foram substituídas por aritmética onde eram ineficientes, mas a teoria permaneceu.
-
----
+| `p` | primos `< p` | recuperados |
+|---|---|---|
+| 131 | 31 | 31 |
+| 503 | 95 | 95 |
+| 1 009 | 168 | 168 |
+| 2 003 | 303 | 303 |
+| 8 009 | 1 007 | 1 007 |
+| 16 381 | 1 899 | 1 899 |
 
 ## Questões abertas
 
-> 1. **Lei de escala de `T_max` para classificação de pares.** A separação perfeita entre gêmeos e mistos exige `T_max` muito maior que `π p`. Experimentos indicam crescimento mais rápido que linear (`T_max = 6500` para `p ≤ 299`). A caracterização analítica dessa escala permanece em aberto.
-> 2. **Detecção de fatores por ressonância espectral** – sem divisibilidade, seria possível identificar fatores comuns apenas pela interferência de picos? (Hipótese B, Nota 20.)
-> 3. **Prova formal do padrão de `ρ_min(k)`** – o maior primo do bloco sempre realiza o menor `ρ`; observado até `k=11`, mas não provado.
-> 4. **Universalidade da assinatura de gêmeos.** A separação espectral foi verificada apenas até `p ≤ 299`. Testes para primos muito maiores, com `T_max` escalado adequadamente, são necessários para confirmar a robustez do critério (Exp DD proposto).
-
----
-
-## Artigo: uma representação espectral da aritmética
-
-O artigo em [`artigo/artigo.pdf`](artigo/artigo.pdf) (LaTeX, 30 páginas,
-autocontido) constrói um dicionário entre a aritmética multiplicativa e a reta
-real — produto vira soma, suavidade vira pertencer a um reticulado, primalidade
-vira irredutibilidade — e desenha o crivo em frequência.
-
-- **Teoremas 4.2 e 4.4** — a geometria exata: para todo primo `q` de um bloco,
-  `ρ(q) = log(1+1/q)/log q`, em igualdade, e a margem de classificação é
-  `ρ_min(k) = log(1+1/q_max)/log q_max ~ 1/(q log q)`;
-- **Teorema 6.4** — a janela necessária para desenhar um bloco é
-  `τ(Seed_k) = Θ(2^k/k)`, por casa de pombos sobre os gaps da semente;
-- **Proposição 7.2** — contagem coerente: `k` candidatos com o mesmo núcleo
-  produzem amplitude exatamente `k` vezes a de um só;
-- **Proposição 8.1** — a assinatura de um par: sinal `1` contra fundo `O(q/T)`;
-- **formalização em Lean 4** de oito declarações, sem `sorry`, em
-  [`formalizacao/`](formalizacao/), com os enunciados no Apêndice A.
-
-O artigo não cita as notas da série: os resultados que usa estão demonstrados
-nele. As notas entram como material suplementar e como registro do percurso —
-inclusive [`artigo/auditoria-e-correcoes.md`](artigo/auditoria-e-correcoes.md),
-que confronta as notas 16–40 com os cálculos e registra três correções (a lei de
-`t_max` é linear em `p`; a rota de Baker é desnecessária; os "80,1%" medem
-incompletude da busca, não sobreposição geométrica).
-
----
+1. **A constante da assinatura de gêmeos.** A Proposição 8.1 dá a ordem `q/T`;
+   o fator entre essa ordem e o máximo medido (da ordem de 1,8) não foi
+   determinado — exigiria controlar a interferência conjunta de todos os primos
+   do sinal, não só do vizinho imediato.
+2. **Outras bases.** Para base `b > 2` vale o análogo da cota, mas não sabemos se
+   vale o valor exato do Teorema 4.4: quando `q` não é ímpar, o vizinho `q+1`
+   deixa de estar garantidamente no reticulado.
+3. **Órbitas e a função de Dickman.** O tamanho da órbita é o objeto da teoria de
+   números suaves; a representação espectral dá a `Ψ(X, y)` uma leitura local
+   (altura do pico), mas a conexão não foi formalizada.
+4. **Cascata além da profundidade 3.** O detector em lote da Nota 37–38 desce a
+   árvore de fatores por níveis; profundidade `≥ 4` exige janela maior.
+5. **Universalidade da assinatura.** Verificada até `p ≤ 299`; escalas maiores
+   com `T` proporcional a `p` continuam não testadas.
 
 ## Citação
 
@@ -118,6 +128,17 @@ incompletude da busca, não sobreposição geométrica).
   title = {Análise Espectral de Primos via Produtos de Intervalos Binários},
   year = {2026},
   doi = {10.5281/zenodo.20674285}
+}
+```
+
+Para citar o artigo em si:
+
+```bibtex
+@misc{bandeira2026representacao,
+  author = {T. Bandeira},
+  title = {Uma representação espectral da aritmética: primos, compostos e
+           crivos em frequência},
+  year = {2026}
 }
 ```
 
