@@ -2,7 +2,7 @@
 
 **T. Bandeira · 2026**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.20674285)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20666130.svg)](https://doi.org/10.5281/zenodo.24546064)
 
 Repositório de uma investigação sobre a representação espectral da aritmética
 elementar: o que acontece quando se olha para os primos como frequências. Contém
